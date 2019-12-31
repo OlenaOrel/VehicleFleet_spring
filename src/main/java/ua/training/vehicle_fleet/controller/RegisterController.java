@@ -2,6 +2,7 @@ package ua.training.vehicle_fleet.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,22 +15,25 @@ import ua.training.vehicle_fleet.service.RegistrationService;
 
 @Slf4j
 @Controller
+@RequestMapping("/register")
 public class RegisterController {
     private final RegistrationService regService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public RegisterController(RegistrationService regService) {
+    public RegisterController(RegistrationService regService, MessageSource messageSource) {
         this.regService = regService;
+        this.messageSource = messageSource;
     }
 
 
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public void registrationFormController(User user) {
         log.info("{}", user);
     }
 
-    @RequestMapping("/register")
+    @RequestMapping()
     public String registrationFormView() {
         return "reg_form.html";
     }

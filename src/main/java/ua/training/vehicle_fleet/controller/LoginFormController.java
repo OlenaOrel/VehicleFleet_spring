@@ -34,6 +34,5 @@ public class LoginFormController {
     public UsersDTO getAllUser() {
         log.info("{}", userService.getAllUsers());
         return UsersDTO.builder().users(userService.getAllUsers()).build();
-
     }
 }

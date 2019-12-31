@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
 <head>
     <meta charset="UTF-8">
-    <title>Registration form's Main</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{registration.title}"></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
@@ -11,27 +12,27 @@
 </head>
 <body ng-app="registration_form" ng-controller="AppCtrl">
 <div class="col-md-8 col-md-offset-2">
-    <h1 style="color: cornflowerblue">Vehicle fleet</h1>
-    <form action="?lang=en" method="GET">
-        <button type="en" class="btn btn-default" style="margin-top:20px">
-            EN
-        </button>
-    </form>
-    <form action="?lang=ua" method="GET">
-        <button type="ua" class="btn btn-default" style="margin-top:20px">
-            UA
-        </button>
-    </form>
-    <form action="/login" method="Post">
-        <button type="sign_in" class="btn btn-default" style="margin-top:20px">
-            Sign in
-        </button>
-    </form>
+    <h1 th:text="#{app.name}" style="color: cornflowerblue"/>
+    <div class="col-md-12 col-md-offset-10" align="right">
+        <form action="?lang=en" method="GET">
+            <input type="submit" value="EN" class="btn btn-default" style="margin-top:10px" ng-disabled="form.$invalid">
+        </form>
+        <form action="?lang=uk" method="GET">
+            <input type="submit" value="UA" class="btn btn-default" style="margin-top:10px" ng-disabled="form.$invalid">
+        </form>
+        <form action="/main" method="Post">
+            <input type="submit" th:value="#{sign.in}"
+                   class="btn btn-default"
+                   style="margin-top:10px"
+                   ng-disabled="form.$invalid">
+        </form>
+
+    </div>
 </div>
 <div class="container" style="margin-top: 60px">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h2 class="page-header">Registration Form Demo</h2>
+            <h2 th:text="#{register.page.header}" class="page-header"></h2>
             <form style="margin-bottom: 30px" name="form" autocomplete="off" novalidate
                   ng-submit="form.$valid && sendForm(auth)">
                 <div class="form-group">
@@ -53,64 +54,64 @@
                            ng-model="auth.last.name">
                 </div>
                 <div class="form-group">
-                    <label id="inputNativeNameLabel" for="exampleInputNativeName">First name in native language</label>
+                    <label th:text="#{first.name}" id="inputOriginNameLabel" for="exampleInputOriginName"></label>
                     <input type="text"
                            class="form-control"
-                           id="exampleInputNativeName"
-                           placeholder="First Name in native language"
+                           id="exampleInputOriginName"
+                           th:placeholder="#{first.name}"
                            required
-                           ng-model="auth.name">
+                           ng-model="auth.origin.name">
                 </div>
                 <div class="form-group">
-                    <label id="inputNativeLastNameLabel" for="exampleInputNativeLastName">Last name in native
-                        language</label>
+                    <label th:text="#{last.name}" id="inputOriginLastNameLabel"
+                           for="exampleInputOriginLastName"></label>
                     <input type="text"
                            class="form-control"
-                           id="exampleInputNativeLastName"
-                           placeholder="Last Name in native language"
+                           id="exampleInputOriginLastName"
+                           th:placeholder="#{first.name}"
                            required
-                           ng-model="auth.native.last.name">
+                           ng-model="auth.origin.last.name">
                 </div>
                 <div class="form-group">
-                    <label id="inputLoginLabel" for="exampleInputLogin">Login</label>
+                    <label th:text="#{login}" id="inputLoginLabel" for="exampleInputLogin"></label>
                     <input type="text"
                            class="form-control"
                            id="exampleInputLogin"
-                           placeholder="Login"
+                           th:placeholder="#{login}"
                            required
                            ng-model="auth.login">
                 </div>
                 <div class="form-group">
-                    <label id="inputEmailLabel" for="exampleInputEmail1">Email address</label>
+                    <label th:text="#{email}" id="inputEmailLabel" for="exampleInputEmail1"></label>
                     <input type="email"
                            class="form-control"
                            id="exampleInputEmail1"
-                           placeholder="Email"
+                           th:placeholder="#{email}"
                            required
                            ng-model="auth.email">
                 </div>
                 <div class="form-group">
-                    <label id="inputPasswordLabel" for="exampleInputPassword1">Password</label>
+                    <label th:text="#{password}" id="inputPasswordLabel" for="exampleInputPassword1"></label>
                     <input type="password"
                            class="form-control"
                            id="exampleInputPassword1"
-                           placeholder="Password"
+                           th:placeholder="#{password}"
                            required
                            ng-model="auth.password">
                 </div>
                 <div class="form-group">
-                    <label id="inputConfirmPasswordLabel" for="exampleInputConfirmPassword1">Confirm Password</label>
-                    <input type="password"
+                    <label th:text="#{confirm.password}" id="inputConfirmPasswordLabel"
+                           for="exampleInputConfirmPassword1"></label>
+                    <input type="confirm password"
                            class="form-control"
                            id="exampleInputConfirmPassword1"
-                           placeholder="Confirm password"
+                           th:placeholder="#{confirm.password}"
                            required
                            ng-model="auth.confirm.password">
                 </div>
                 <form action="/vehicle-fleet" method="Post">
-                    <button type="register" class="btn btn-success" style="margin-top:30px" ng-disabled="form.$invalid">
-                        Sign up
-                    </button>
+                    <input type="submit" th:value="#{sign.up}" class="btn btn-default" style="margin-top:20px"
+                           ng-disabled="form.$invalid">
                 </form>
             </form>
         </div>
