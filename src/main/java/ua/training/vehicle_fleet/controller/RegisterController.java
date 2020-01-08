@@ -2,15 +2,12 @@ package ua.training.vehicle_fleet.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import ua.training.vehicle_fleet.entity.User;
+import ua.training.vehicle_fleet.exception.UserExistException;
 import ua.training.vehicle_fleet.service.RegistrationService;
 
 @Slf4j
@@ -18,24 +15,33 @@ import ua.training.vehicle_fleet.service.RegistrationService;
 @RequestMapping("/register")
 public class RegisterController {
     private final RegistrationService regService;
-    private final MessageSource messageSource;
 
     @Autowired
-    public RegisterController(RegistrationService regService, MessageSource messageSource) {
+    public RegisterController(RegistrationService regService) {
         this.regService = regService;
-        this.messageSource = messageSource;
     }
-
 
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(method = RequestMethod.POST)
-    public void registrationFormController(User user) {
+    @PostMapping
+    public String registrationFormController(User user) {
         log.info("{}", user);
+        if (regService.isPasswordEqualsConfirmPassword(user)) {
+            regService.setDefaultUserEmptyValues(user);
+            regService.encodePassword(user);
+            try {
+                regService.saveNewUser(user);
+            } catch (UserExistException e) {
+                e.printMessage(user.getEmail());
+                return "reg_form";
+            }
+            return "login.html";
+        }
+        return "reg_form.html";
     }
 
-    @RequestMapping()
+    @GetMapping
     public String registrationFormView() {
-        return "reg_form.html";
+        return "reg_form";
     }
 
     @ExceptionHandler(RuntimeException.class)

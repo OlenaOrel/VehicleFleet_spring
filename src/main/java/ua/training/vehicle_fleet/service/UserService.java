@@ -1,7 +1,10 @@
 package ua.training.vehicle_fleet.service;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ua.training.vehicle_fleet.dto.UserDTO;
 import ua.training.vehicle_fleet.entity.User;
@@ -12,7 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -26,19 +29,22 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> findByUserLogin(UserDTO userDTO) {
-        //TODO check for user availability. password check
-        return userRepository.findByEmail(userDTO.getEmail());
-    }
-
-    public void saveNewUser(User user) {
-        //TODO inform the user about the replay email
-        // TODO exception to endpoint
-        try {
-            userRepository.save(user);
-        } catch (Exception ex) {
-            log.info("{Почтовый адрес уже существует}");
+    public Optional<User> findByUserEmail(UserDTO userDTO) {
+        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
+        if (user.isPresent()) {
+            User u = user.get();
+            if (u.getPassword().equals(userDTO.getPassword())) {
+                return user;
+            }
         }
+        return Optional.empty();
+    }
+
+    @Override
+    public User loadUserByUsername(@NonNull String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email).orElseThrow(() ->
+                new UsernameNotFoundException("User with email: " + email + "has not found"));
 
     }
+
 }

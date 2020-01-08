@@ -14,13 +14,10 @@
 <div class="col-md-8 col-md-offset-2">
     <h1 th:text="#{app.name}" style="color: cornflowerblue"/>
     <div class="col-md-12 col-md-offset-10" align="right">
-        <form action="?lang=en" method="GET">
-            <input type="submit" value="EN" class="btn btn-default" style="margin-top:10px" ng-disabled="form.$invalid">
-        </form>
-        <form action="?lang=uk" method="GET">
-            <input type="submit" value="UA" class="btn btn-default" style="margin-top:10px" ng-disabled="form.$invalid">
-        </form>
-        <form action="/main" method="Post">
+        <div class="locale">
+            <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
+        </div>
+        <form action="/login" method="GET">
             <input type="submit" th:value="#{sign.in}"
                    class="btn btn-default"
                    style="margin-top:10px"
@@ -35,45 +32,54 @@
             <h2 th:text="#{register.page.header}" class="page-header"></h2>
             <form style="margin-bottom: 30px" name="form" autocomplete="off" novalidate
                   ng-submit="form.$valid && sendForm(auth)">
+                <div id="resultMessage">
+                    <div class="error" th:if="${param.error}" th:text="#{invalid.email.password}">
+                    </div>
+                    <div class="data" th:if="${param.data}" th:text="#{data.sign.up}">
+                    </div>
+                </div>
+                <!--                <input type="hidden" name="_csrf" value="{{_csrf.token}}">-->
                 <div class="form-group">
-                    <label id="inputNameLabel" for="exampleInputName">First name</label>
+                    <label id="exampleInputNameLabel" for="exampleInputName">First name</label>
                     <input type="text"
                            class="form-control"
                            id="exampleInputName"
-                           placeholder="First Name"
+                           placeholder="First name"
                            required
-                           ng-model="auth.name">
+                           ng-model="auth.firstName">
                 </div>
                 <div class="form-group">
-                    <label id="inputLastNameLabel" for="exampleInputLastName">Last name</label>
+                    <label id="exampleInputLastNameLabel" for="exampleInputLastName">Last name</label>
                     <input type="text"
                            class="form-control"
                            id="exampleInputLastName"
-                           placeholder="Last Name"
+                           placeholder="Last name"
                            required
-                           ng-model="auth.last.name">
+                           ng-model="auth.lastName">
                 </div>
                 <div class="form-group">
-                    <label th:text="#{first.name}" id="inputOriginNameLabel" for="exampleInputOriginName"></label>
+                    <label th:text="#{first.name}" id="exampleInputOriginNameLabel"
+                           for="exampleInputOriginName"></label>
                     <input type="text"
                            class="form-control"
                            id="exampleInputOriginName"
                            th:placeholder="#{first.name}"
                            required
-                           ng-model="auth.origin.name">
+                           ng-model="auth.originFirstName">
                 </div>
                 <div class="form-group">
-                    <label th:text="#{last.name}" id="inputOriginLastNameLabel"
+                    <label th:text="#{last.name}" id="exampleInputOriginLastNameLabel"
                            for="exampleInputOriginLastName"></label>
                     <input type="text"
                            class="form-control"
                            id="exampleInputOriginLastName"
-                           th:placeholder="#{first.name}"
+                           th:placeholder="#{last.name}"
                            required
-                           ng-model="auth.origin.last.name">
+                           ng-model="auth.originLastName">
                 </div>
                 <div class="form-group">
-                    <label th:text="#{login}" id="inputLoginLabel" for="exampleInputLogin"></label>
+                    <label th:text="#{login}" id="exampleInputLoginLabel"
+                           for="exampleInputLogin"></label>
                     <input type="text"
                            class="form-control"
                            id="exampleInputLogin"
@@ -82,7 +88,8 @@
                            ng-model="auth.login">
                 </div>
                 <div class="form-group">
-                    <label th:text="#{email}" id="inputEmailLabel" for="exampleInputEmail1"></label>
+                    <label th:text="#{email}" id="exampleInputEmailLabel"
+                           for="exampleInputEmail1"></label>
                     <input type="email"
                            class="form-control"
                            id="exampleInputEmail1"
@@ -91,7 +98,8 @@
                            ng-model="auth.email">
                 </div>
                 <div class="form-group">
-                    <label th:text="#{password}" id="inputPasswordLabel" for="exampleInputPassword1"></label>
+                    <label th:text="#{password}" id="exampleInputPasswordLabel"
+                           for="exampleInputPassword1"></label>
                     <input type="password"
                            class="form-control"
                            id="exampleInputPassword1"
@@ -100,16 +108,16 @@
                            ng-model="auth.password">
                 </div>
                 <div class="form-group">
-                    <label th:text="#{confirm.password}" id="inputConfirmPasswordLabel"
+                    <label th:text="#{confirm.password}" id="exampleInputConfirmPasswordLabel"
                            for="exampleInputConfirmPassword1"></label>
-                    <input type="confirm password"
+                    <input type="password"
                            class="form-control"
                            id="exampleInputConfirmPassword1"
                            th:placeholder="#{confirm.password}"
                            required
-                           ng-model="auth.confirm.password">
+                           ng-model="auth.confirmPassword">
                 </div>
-                <form action="/vehicle-fleet" method="Post">
+                <form action="/register" method="Post">
                     <input type="submit" th:value="#{sign.up}" class="btn btn-default" style="margin-top:20px"
                            ng-disabled="form.$invalid">
                 </form>
@@ -117,6 +125,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/public/js/reg_form.js"></script>
+<script type="text/javascript" src="js/reg_form.js"></script>
 </body>
 </html>
