@@ -33,8 +33,7 @@ public class User implements UserDetails {
     @Column(name = "origin_last_name", nullable = false)
     String originLastName;
     @Column(name = "login", nullable = false)
-//    String login;
-            String username;
+    String login;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
