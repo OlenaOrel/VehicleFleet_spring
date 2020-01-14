@@ -9,15 +9,14 @@ import java.util.List;
 public class Bus {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long id;
-    String mark;
+    private Long id;
+    private String mark;
     @Column(name = "number_plate", nullable = false)
-    String numberPlate;
-    @Column(name = "number_of_seats", nullable = false)
-    Byte numberOfSeats;
+    private String licensePlate;
+
     @ManyToMany(mappedBy = "busList")
-    List<Driver> drivers;
-    @Column(name = "route_list")
-    @OneToMany(mappedBy = "bus")
+    private List<User> drivers;
+
+    @ManyToMany(mappedBy = "busList")
     private List<Route> routeList;
 }

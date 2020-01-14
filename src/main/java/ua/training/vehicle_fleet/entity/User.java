@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -24,33 +25,57 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
+
     @Column(name = "last_name", nullable = false)
     private String lastName;
     @Column(name = "origin_first_name", nullable = false)
-    String originFirstName;
+    private String originFirstName;
     @Column(name = "origin_last_name", nullable = false)
-    String originLastName;
+    private String originLastName;
+
     @Column(name = "login", nullable = false)
-    String login;
+    private String login;
+
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
-    String password;
+    private String password;
+
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
     @Column(name = "account_non_expired")
     private Boolean accountNonExpired;
+
     @Column(name = "account_non_locked")
     private Boolean accountNonLocked;
+
     @Column(name = "credentials_non_expired")
     private Boolean credentialsNonExpired;
+
     private Boolean enabled;
 
-    @Transient
-    String confirmPassword;
+    @ManyToMany
+    @JoinTable(
+            name = "can_drive",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "bus_id")
+
+    )
+    private List<Bus> busList;
+
+    @ManyToMany
+    @JoinTable(
+            name = "perperator",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "route_id")
+    )
+    private List<Route> routeList;
 
     @Override
     public Set<UserRole> getAuthorities() {
