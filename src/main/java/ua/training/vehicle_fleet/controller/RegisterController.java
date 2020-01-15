@@ -5,14 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import ua.training.vehicle_fleet.entity.User;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import ua.training.vehicle_fleet.dto.UserRegisterDTO;
 import ua.training.vehicle_fleet.exception.UserExistException;
 import ua.training.vehicle_fleet.service.RegistrationService;
 
 @Slf4j
 @Controller
-@RequestMapping("/register")
+@RequestMapping( "/register" )
 public class RegisterController {
     private final RegistrationService regService;
 
@@ -21,22 +24,18 @@ public class RegisterController {
         this.regService = regService;
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public String registrationFormController(User user) {
-        log.info("{}", user);
-        if (regService.isPasswordEqualsConfirmPassword(user)) {
-            regService.setDefaultUserEmptyValues(user);
-            regService.encodePassword(user);
+    public String registrationFormController( UserRegisterDTO user ) {
+        log.info( "{}", user );
+        if ( regService.isPasswordEqualsConfirmPassword( user ) ) {
             try {
-                regService.saveNewUser(user);
-            } catch (UserExistException e) {
-                e.printMessage(user.getEmail());
+                regService.saveNewUser( user );
+            } catch ( UserExistException e ) {
+                e.printMessage();
                 return "reg_form";
             }
-            return "login.html";
         }
-        return "reg_form.html";
+        return "login";
     }
 
     @GetMapping
@@ -44,8 +43,8 @@ public class RegisterController {
         return "reg_form";
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity handleRuntimeException(RuntimeException ex) {
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    @ExceptionHandler( RuntimeException.class )
+    public ResponseEntity handleRuntimeException( RuntimeException ex ) {
+        return new ResponseEntity( HttpStatus.BAD_REQUEST );
     }
 }

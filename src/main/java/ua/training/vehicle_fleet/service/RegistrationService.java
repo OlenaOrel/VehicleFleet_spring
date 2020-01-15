@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ua.training.vehicle_fleet.dto.UserRegisterDTO;
 import ua.training.vehicle_fleet.entity.User;
 import ua.training.vehicle_fleet.entity.UserRole;
 import ua.training.vehicle_fleet.exception.UserExistException;
@@ -21,29 +22,39 @@ public class RegistrationService {
         this.userRepository = userRepository;
     }
 
-    public boolean isPasswordEqualsConfirmPassword(@NonNull User user) {
+    public boolean isPasswordEqualsConfirmPassword( @NonNull UserRegisterDTO user ) {
         return user.getPassword().equals(user.getConfirmPassword());
     }
 
-    public User saveNewUser(@NonNull User user) throws UserExistException {
-        Optional<User> saveUser = Optional.of(userRepository.save(user));
-        if (saveUser.isPresent()) {
+    public User saveNewUser( @NonNull UserRegisterDTO userDTO ) throws UserExistException {
+        User user = createUserFromUserRegisterDTO( userDTO );
+        Optional<User> saveUser = Optional.of(userRepository.save( user ));
+        if ( saveUser.isPresent() ) {
             return saveUser.get();
         } else {
-            throw new UserExistException(user.getEmail());
+            throw new UserExistException( user.getEmail() );
         }
     }
 
-    public void setDefaultUserEmptyValues(@NonNull User user) {
-        user.setRole(UserRole.ROLE_USER);
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
-        user.setEnabled(true);
+    private User createUserFromUserRegisterDTO( @NonNull UserRegisterDTO userDTO ) {
+        return User.builder()
+                .firstName( userDTO.getFirstName() )
+                .lastName( userDTO.getLastName() )
+                .originFirstName( userDTO.getOriginFirstName() )
+                .originLastName( userDTO.getOriginLastName() )
+                .login( userDTO.getLogin() )
+                .email( userDTO.getEmail() )
+                .password(
+                        encodePassword( userDTO.getPassword() ) )
+                .role( UserRole.ROLE_DRIVER )
+                .accountNonExpired( true )
+                .accountNonLocked( true )
+                .credentialsNonExpired( true )
+                .enabled( true )
+                .build();
     }
 
-    public void encodePassword(@NonNull User user) {
-        String password = user.getPassword();
-        user.setPassword(new BCryptPasswordEncoder().encode(password));
+    private String encodePassword( @NonNull String password ) {
+        return new BCryptPasswordEncoder().encode( password );
     }
 }

@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ua.training.vehicle_fleet.entity.User;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping( "/user" )
 public class UserController {
 
     @GetMapping
-    public String userForm(Model model, User user) {
-        model.addAttribute("user", user);
+    public String userForm( Model model, User user ) {
+        model.addAttribute( "user", user );
         return "user";
     }
 

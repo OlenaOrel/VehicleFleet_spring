@@ -25,19 +25,10 @@ public class LoginFormController {
         this.userService = userService;
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public String loginFormController(Authentication authentication) {
-        if (authentication.getAuthorities().contains(UserRole.ROLE_ADMIN)) {
-            return "admin";
-        }
-        if (authentication.getAuthorities().contains(UserRole.ROLE_DRIVER)) {
-            return "driver";
-        }
-        if (authentication.getAuthorities().contains(UserRole.ROLE_USER)) {
-            return "user";
-        }
-        return "login";
+    @PostMapping
+    public void loginFormController( Authentication authentication, Model model ) {
+        User user = ( User ) authentication.getPrincipal();
+        model.addAttribute( "user", user );
     }
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
@@ -47,11 +38,5 @@ public class LoginFormController {
         model.addAttribute("error", error != null);
         model.addAttribute("logout", logout != null);
         return "login";
-    }
-
-    @RequestMapping(value = "user", method = RequestMethod.GET)
-    public UsersDTO getAllUser() {
-        log.info("{}", userService.getAllUsers());
-        return UsersDTO.builder().users(userService.getAllUsers()).build();
     }
 }

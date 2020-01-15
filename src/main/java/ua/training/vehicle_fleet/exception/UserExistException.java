@@ -9,7 +9,7 @@ public class UserExistException extends Exception {
         this.email = email;
     }
 
-    public void printMessage(String email) {
+    public void printMessage() {
         System.err.println(new StringBuffer(MESSAGE).append(email).append(EXIST));
     }
 }

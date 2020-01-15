@@ -1,7 +1,6 @@
 package ua.training.vehicle_fleet.dto;
 
 import lombok.*;
-import ua.training.vehicle_fleet.entity.User;
 
 import java.util.List;
 
@@ -12,9 +11,9 @@ import java.util.List;
 @Builder
 @ToString
 public class UsersDTO {
-    private List<User> users;
+    private List<UserDTO> users;
 
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         return users;
     }
 }
