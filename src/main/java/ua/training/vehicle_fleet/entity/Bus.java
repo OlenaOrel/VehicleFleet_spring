@@ -1,8 +1,17 @@
 package ua.training.vehicle_fleet.entity;
 
-import javax.persistence.*;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.util.Set;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "buses",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"number_plate"})})
@@ -13,10 +22,12 @@ public class Bus {
     private String mark;
     @Column(name = "number_plate", nullable = false)
     private String licensePlate;
+    @Column(nullable = false)
+    private Boolean free;
 
-    @ManyToMany(mappedBy = "busList")
-    private List<User> drivers;
+    @ManyToMany(mappedBy = "busSet")
+    private Set<User> drivers;
 
-    @ManyToMany(mappedBy = "busList")
-    private List<Route> routeList;
+    @ManyToMany(mappedBy = "busSet")
+    private Set<Route> routeSet;
 }

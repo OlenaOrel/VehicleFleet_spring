@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ua.training.vehicle_fleet.entity.User;
 import ua.training.vehicle_fleet.repository.UserRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,18 +29,14 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public Optional<User> findByUserEmail( @NonNull String email ) {
-        Optional<User> user = userRepository.findByEmail( email );
-        if ( user.isPresent() ) {
-            return user;
-        }
-        return Optional.empty();
+    public Optional<User> findByUserEmail(@NonNull String email) throws SQLException {
+        return userRepository.findByEmail(email);
     }
 
     @Override
-    public User loadUserByUsername( @NonNull String email ) throws UsernameNotFoundException {
-        return userRepository.findByEmail( email ).orElseThrow( () ->
-                new UsernameNotFoundException( "User with email: " + email + "has not found" ) );
+    public User loadUserByUsername(@NonNull String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email).orElseThrow(() ->
+                new UsernameNotFoundException("User with email: " + email + "has not found"));
 
     }
 

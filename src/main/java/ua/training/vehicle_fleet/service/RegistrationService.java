@@ -38,19 +38,16 @@ public class RegistrationService {
 
     private User createUserFromUserRegisterDTO( @NonNull UserRegisterDTO userDTO ) {
         return User.builder()
-                .firstName( userDTO.getFirstName() )
-                .lastName( userDTO.getLastName() )
-                .originFirstName( userDTO.getOriginFirstName() )
-                .originLastName( userDTO.getOriginLastName() )
-                .login( userDTO.getLogin() )
-                .email( userDTO.getEmail() )
+                .firstName(userDTO.getFirstName())
+                .lastName(userDTO.getLastName())
+                .originFirstName(userDTO.getOriginFirstName())
+                .originLastName(userDTO.getOriginLastName())
+                .login(userDTO.getLogin())
+                .email(userDTO.getEmail())
                 .password(
-                        encodePassword( userDTO.getPassword() ) )
-                .role( UserRole.ROLE_DRIVER )
-                .accountNonExpired( true )
-                .accountNonLocked( true )
-                .credentialsNonExpired( true )
-                .enabled( true )
+                        encodePassword(userDTO.getPassword()))
+                .role(UserRole.ROLE_DRIVER)
+                .free(true)
                 .build();
     }
 
