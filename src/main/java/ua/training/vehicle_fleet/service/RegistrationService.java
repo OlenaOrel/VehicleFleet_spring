@@ -22,10 +22,6 @@ public class RegistrationService {
         this.userRepository = userRepository;
     }
 
-    public boolean isPasswordEqualsConfirmPassword( @NonNull UserRegisterDTO user ) {
-        return user.getPassword().equals(user.getConfirmPassword());
-    }
-
     public User saveNewUser( @NonNull UserRegisterDTO userDTO ) throws UserExistException {
         User user = createUserFromUserRegisterDTO( userDTO );
         Optional<User> saveUser = Optional.of(userRepository.save( user ));

@@ -26,12 +26,12 @@ public class LoginFormController {
     }
 
     @PostMapping
-    public void loginFormController( Authentication authentication, Model model ) {
-        User user = ( User ) authentication.getPrincipal();
-        model.addAttribute( "user", user );
+    public void loginFormController(Authentication authentication, Model model) {
+        User user = (User) authentication.getPrincipal();
+        model.addAttribute("user", user);
     }
 
-    @RequestMapping(value = "login", method = RequestMethod.GET)
+    @GetMapping
     public String loginPage(@RequestParam(value = "error", required = false) String error,
                             @RequestParam(value = "logout", required = false) String logout,
                             Model model) {
