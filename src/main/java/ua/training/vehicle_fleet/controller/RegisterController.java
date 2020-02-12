@@ -15,7 +15,7 @@ import ua.training.vehicle_fleet.service.RegistrationService;
 
 @Slf4j
 @Controller
-@RequestMapping( "/register" )
+@RequestMapping("/register")
 public class RegisterController {
     private final RegistrationService regService;
 
@@ -25,7 +25,7 @@ public class RegisterController {
     }
 
     @PostMapping
-    public String registrationFormController( UserRegisterDTO user ) {
+    public String registrationFormController(UserRegisterDTO user) {
         log.info("{}", user);
         if (isInputValid(user)) {
             try {

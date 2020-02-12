@@ -22,17 +22,17 @@ public class RegistrationService {
         this.userRepository = userRepository;
     }
 
-    public User saveNewUser( @NonNull UserRegisterDTO userDTO ) throws UserExistException {
-        User user = createUserFromUserRegisterDTO( userDTO );
-        Optional<User> saveUser = Optional.of(userRepository.save( user ));
-        if ( saveUser.isPresent() ) {
+    public User saveNewUser(@NonNull UserRegisterDTO userDTO) throws UserExistException {
+        User user = createUserFromUserRegisterDTO(userDTO);
+        Optional<User> saveUser = Optional.of(userRepository.save(user));
+        if (saveUser.isPresent()) {
             return saveUser.get();
         } else {
-            throw new UserExistException( user.getEmail() );
+            throw new UserExistException(user.getEmail());
         }
     }
 
-    private User createUserFromUserRegisterDTO( @NonNull UserRegisterDTO userDTO ) {
+    private User createUserFromUserRegisterDTO(@NonNull UserRegisterDTO userDTO) {
         return User.builder()
                 .firstName(userDTO.getFirstName())
                 .lastName(userDTO.getLastName())
@@ -47,7 +47,7 @@ public class RegistrationService {
                 .build();
     }
 
-    private String encodePassword( @NonNull String password ) {
-        return new BCryptPasswordEncoder().encode( password );
+    private String encodePassword(@NonNull String password) {
+        return new BCryptPasswordEncoder().encode(password);
     }
 }

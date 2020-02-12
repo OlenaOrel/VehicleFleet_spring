@@ -2,20 +2,19 @@ package ua.training.vehicle_fleet.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import ua.training.vehicle_fleet.dto.UsersDTO;
-import ua.training.vehicle_fleet.entity.UserRole;
+import org.springframework.web.bind.annotation.RequestParam;
+import ua.training.vehicle_fleet.entity.User;
 import ua.training.vehicle_fleet.service.UserService;
 
 @Slf4j
-@RestController
-@RequestMapping(value = "/")
+@Controller
+@RequestMapping(value = "/login")
 public class LoginFormController {
 
     private final UserService userService;
