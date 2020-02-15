@@ -12,7 +12,6 @@ public class UserRegisterDTO {
     private String lastName;
     private String originFirstName;
     private String originLastName;
-    private String login;
     private String email;
     private String password;
     private String confirmPassword;

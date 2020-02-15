@@ -3,7 +3,6 @@ package ua.training.vehicle_fleet.service;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.training.vehicle_fleet.entity.Bus;
 import ua.training.vehicle_fleet.entity.Route;
 import ua.training.vehicle_fleet.entity.User;
 import ua.training.vehicle_fleet.exception.DriverNotFoundException;
@@ -15,7 +14,6 @@ import ua.training.vehicle_fleet.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CreateRouteService {
@@ -35,12 +33,12 @@ public class CreateRouteService {
         this.userRepository = userRepository;
     }
 
-    public Set<Bus> getAllFreeBuses() {
-        return Optional.ofNullable(busRepository.findByFree(Boolean.TRUE)).orElseThrow(RuntimeException::new);
-    }
+//    public Set<Bus> getAllFreeBuses() {
+//        return Optional.ofNullable(busRepository.findByFree(Boolean.TRUE)).orElseThrow(RuntimeException::new);
+//    }
 
     public List<User> getAllBusDriversByBusId(@NonNull Long id) throws DriverNotFoundException {
-        return Optional.ofNullable(userRepository.findByBusSet_Id(id))
+        return Optional.ofNullable(userRepository.findByBusList_Id(id))
                 .orElseThrow(() ->
                         new DriverNotFoundException("Free driver not found"));
     }
@@ -53,14 +51,12 @@ public class CreateRouteService {
                 .arrivalToCityUk(route.getArrivalToCityUk())
                 .departureFromCityEn(route.getDepartureFromCityEn())
                 .departureFromCityUk(route.getDepartureFromCityUk())
-                .numberOfRoute(route.getNumberOfRoute())
-                .date(date)
-                .finished(false)
+                .number(route.getNumber())
                 .build();
     }
 
     private Route getRouteByNumberOfRoute(@NonNull Integer numberOfRoute) throws RouteNotFoundException {
-        return routeRepository.findByNumberOfRoute(numberOfRoute).orElseThrow(() ->
+        return routeRepository.findByNumber(numberOfRoute).orElseThrow(() ->
                 new RouteNotFoundException("Route not found"));
     }
 }

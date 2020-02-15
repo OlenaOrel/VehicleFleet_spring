@@ -52,8 +52,8 @@ public class RegisterController {
     private boolean isInputValid(UserRegisterDTO user) {
         if (user.getFirstName() == null || user.getLastName() == null
                 || user.getOriginFirstName() == null || user.getOriginLastName() == null
-                || user.getLogin() == null || user.getEmail() == null
-                || user.getPassword() == null || user.getConfirmPassword() == null) {
+                || user.getEmail() == null || user.getPassword() == null
+                || user.getConfirmPassword() == null) {
 
             return false;
         }
@@ -62,7 +62,6 @@ public class RegisterController {
                 && user.getLastName().matches(RegexConstants.NAME_EN)
                 && user.getOriginFirstName().matches(RegexConstants.NAME_UK)
                 && user.getOriginLastName().matches(RegexConstants.NAME_UK)
-                && user.getLogin().matches(RegexConstants.LOGIN)
                 && user.getEmail().matches(RegexConstants.EMAIL)
                 && user.getPassword().equals(user.getConfirmPassword());
     }

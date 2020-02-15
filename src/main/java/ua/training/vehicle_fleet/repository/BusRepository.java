@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ua.training.vehicle_fleet.entity.Bus;
 
 import java.util.List;
-import java.util.Set;
 
 public interface BusRepository extends JpaRepository<Bus, Long> {
 
@@ -12,6 +11,5 @@ public interface BusRepository extends JpaRepository<Bus, Long> {
 
     List<Bus> findAll();
 
-    Set<Bus> findByFree(Boolean isFree);
 
 }

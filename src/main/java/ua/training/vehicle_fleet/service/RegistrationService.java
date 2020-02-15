@@ -38,12 +38,10 @@ public class RegistrationService {
                 .lastName(userDTO.getLastName())
                 .originFirstName(userDTO.getOriginFirstName())
                 .originLastName(userDTO.getOriginLastName())
-                .login(userDTO.getLogin())
                 .email(userDTO.getEmail())
                 .password(
                         encodePassword(userDTO.getPassword()))
                 .role(UserRole.ROLE_DRIVER)
-                .free(true)
                 .build();
     }
 
