@@ -22,4 +22,6 @@ public interface AppointmentRepository extends Repository<Appointment, Long> {
     @Query("update Appointment t set t.status = :status where t.id = :id")
     void updateStatusById(@Param("status") AppointmentStatus status, @Param("id") Long id);
 
+    Optional<Appointment> findByStatusAndDriver_id(AppointmentStatus status, Long id);
+
 }
