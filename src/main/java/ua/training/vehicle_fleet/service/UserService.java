@@ -6,12 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.training.vehicle_fleet.entity.User;
+import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.repository.UserRepository;
 
-import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -24,15 +25,6 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers() {
-        //TODO checking for an empty user list
-        return userRepository.findAll();
-    }
-
-    public Optional<User> findByUserEmail(@NonNull String email) throws SQLException {
-        return userRepository.findByEmail(email);
-    }
-
     @Override
     public User loadUserByUsername(@NonNull String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).orElseThrow(() ->
@@ -40,4 +32,14 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public User getUserById(@NonNull Long id) throws EntityNotFoundException {
+        return userRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Driver with id = " + id + "not found"));
+    }
+
+    @Transactional
+    public List<User> getNotAppointDriverForBus() {
+        LocalDate date = LocalDate.now();
+        return userRepository.findNotAppointedDriverForBus(date);
+    }
 }

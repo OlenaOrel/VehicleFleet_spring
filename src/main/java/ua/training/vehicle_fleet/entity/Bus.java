@@ -16,7 +16,7 @@ import java.util.List;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"license_plate"})})
 public class Bus {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 50)
     private String mark;

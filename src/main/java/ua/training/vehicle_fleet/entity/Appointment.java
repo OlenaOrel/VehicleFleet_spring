@@ -11,11 +11,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "appointment", uniqueConstraints = {@UniqueConstraint(columnNames = {"driver_id", "date"})})
+@Table(name = "appointment", uniqueConstraints = {@UniqueConstraint(name = "appointment", columnNames = {"driver_id", "date"})})
 public class Appointment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "id")
@@ -32,4 +32,15 @@ public class Appointment {
     @Enumerated(EnumType.STRING)
     AppointmentStatus status;
 
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", route_id=" + route.getId() +
+                ", bus_id=" + bus.getId() +
+                ", driver_id=" + driver.getId() +
+                ", date=" + date +
+                ", status=" + status +
+                '}';
+    }
 }

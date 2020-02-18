@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body ng-app="login_form" ng-controller="AppCtrl">
+<body>
 <div class="col-md-8 col-md-offset-2">
     <h1 th:text="#{message.app.name}" style="color: cornflowerblue"/>
-    <div class="col-md-12 col-md-offset-10" align="right">
+    <div class="col-md-12 col-md-offset-2" align="right">
         <div class="locale">
             <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
         </div>
         <form action="/register" method="GET">
-            <input type="submit" th:value="#{message.registration}" class="btn btn-default" style="margin-top:20px">
+            <input type="submit" th:value="#{message.sign.up}" class="btn btn-default" style="margin-top:20px">
         </form>
     </div>
 </div>
@@ -34,14 +34,14 @@
                         <div th:if="${param.logout}" class="alert alert-success">
                             You have been logged out.
                         </div>
-                        <label th:text="#{message.email}" for="email"></label>
+                        <label th:text="#{message.user.email}" for="email"></label>
                         <input type="email" id="email" name="email" class="form-control"
-                               th:placeholder="#{message.email}"/>
-                        <label th:text="#{message.password}" for="password"></label>
+                               th:placeholder="#{message.user.email}"/>
+                        <label th:text="#{message.user.password}" for="password"></label>
                         <input type="password" id="password" name="password" class="form-control"
-                               th:placeholder="#{message.password}"/>
+                               th:placeholder="#{message.user.password}"/>
                         <div class="form-actions">
-                            <input type="submit" th:value="#{message.log.in}" class="btn btn-default"
+                            <input type="submit" th:value="#{message.login}" class="btn btn-default"
                                    style="margin-top:20px">
                         </div>
                     </fieldset>

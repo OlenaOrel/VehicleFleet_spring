@@ -16,7 +16,7 @@ import java.util.List;
 public class Route {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -25,13 +25,13 @@ public class Route {
     @Column(name = "departure_from_city", nullable = false, length = 50)
     private String departureFromCityEn;
 
-    @Column(name = "arival_to_city", nullable = false, length = 50)
+    @Column(name = "arrival_to_city", nullable = false, length = 50)
     private String arrivalToCityEn;
 
     @Column(name = "departure_from_city_uk", nullable = false, length = 50)
     private String departureFromCityUk;
 
-    @Column(name = "arival_to_city_uk", nullable = false, length = 50)
+    @Column(name = "arrival_to_city_uk", nullable = false, length = 50)
     private String arrivalToCityUk;
 
     @OneToMany

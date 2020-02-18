@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body ng-app="registration_form" ng-controller="AppCtrl">
+<body>
 <div class="col-md-8 col-md-offset-2">
     <h1 th:text="#{message.app.name}" style="color: cornflowerblue"/>
     <div class="col-md-12 col-md-offset-10" align="right">
@@ -16,9 +16,8 @@
             <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
         </div>
         <form action="/login" method="GET">
-            <input type="submit" th:value="#{message.log.in}"
-                   class="btn btn-default"
-                   style="margin-top:10px">
+            <input type="submit" th:value="#{message.login}"
+                   class="btn btn-default" style="margin-top:10px">
         </form>
 
     </div>
@@ -30,8 +29,8 @@
             <div>
                 <form th:action="@{/register}" method="post">
                     <fieldset>
-                        <!--                <input type="hidden" name="_csrf" value="{{_csrf.token}}">-->
-                        <div th:if="${param.error}" class="alert alert-error" th:text="#{message.invalid.input}"
+                        <div th:if="${param.error}" class="alert alert-error"
+                             th:text="#{message.invalid.email.password}"
                              style="margin-top:20px; color: red"></div>
                         <div class="data" th:if="${param.data}" th:text="#{message.data.sign.up}"
                              style="margin-top:20px; color: red"></div>
@@ -44,28 +43,28 @@
                         <input type="text" id="lastName" name="lastName" class="form-control"
                                placeholder="Last name"/>
 
-                        <label th:text="#{message.first.name}" for="originFirstName"></label>
+                        <label th:text="#{message.user.origin.first.name}" for="originFirstName"></label>
                         <input type="text" id="originFirstName" name="originFirstName" class="form-control"
-                               th:placeholder="#{message.first.name}"/>
+                               th:placeholder="#{message.user.origin.first.name}"/>
 
-                        <label th:text="#{message.last.name}" for="originLastName"></label>
+                        <label th:text="#{message.user.origin.last.name}" for="originLastName"></label>
                         <input type="text" id="originLastName" name="originLastName" class="form-control"
-                               th:placeholder="#{message.last.name}"/>
+                               th:placeholder="#{message.user.origin.last.name}"/>
 
-                        <label th:text="#{message.email}" for="email"></label>
+                        <label th:text="#{message.user.email}" for="email"></label>
                         <input type="email" id="email" name="email" class="form-control"
-                               th:placeholder="#{message.email}"/>
+                               th:placeholder="#{message.user.email}"/>
 
-                        <label th:text="#{message.password}" for="password"></label>
+                        <label th:text="#{message.user.password}" for="password"></label>
                         <input type="password" id="password" name="password" class="form-control"
-                               th:placeholder="#{message.password}"/>
+                               th:placeholder="#{message.user.password}"/>
 
-                        <label th:text="#{message.confirm.password}" for="confirmPassword"></label>
+                        <label th:text="#{message.user.confirm.password}" for="confirmPassword"></label>
                         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                               th:placeholder="#{message.password}"/>
+                               th:placeholder="#{message.user.confirm.password}"/>
 
                         <div class="form-actions">
-                            <input type="submit" th:value="#{message.registration}" class="btn btn-default"
+                            <input type="submit" th:value="#{message.sign.up}" class="btn btn-default"
                                    style="margin-top:20px">
                         </div>
                     </fieldset>
