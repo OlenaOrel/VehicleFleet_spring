@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <head>
     <meta charset="UTF-8">
@@ -8,32 +9,59 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body ng-app="login_form" ng-controller="AppCtrl">
-<div class="col-md-8 col-md-offset-2">
-    <h1 th:text="#{message.app.name}" style="color: cornflowerblue"/>
-    <h3 th:if="${#locale.getLanguage().equals('en')}"
-        th:text="'Driver:' + ${user.firstName} + ' ' + ${user.lastName} "
-        style="color: cornflowerblue"></h3>
-    <h3 th:if="${#locale.getLanguage().equals('uk')}"
-        th:text="'Водій:' + ${user.originFirstName} + ' ' + ${user.originLastName}"
-        style="color: cornflowerblue"></h3>
-    <div align="right" class="col-md-12 col-md-offset-2">
-        <div class="locale">
-            <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
+<body>
+<div class="container" style="margin-top: 60px">
+    <div class="row">
+        <div class="col-md-12 col-md-offset-2">
+            <h1 th:text="#{message.app.name}" style="color: cornflowerblue"/>
+            <div align="right">
+                <div class="locale">
+                    <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
+                </div>
+                <h6 sec:authentication="name"></h6>
+                <form action="/login?logout=true" method="POST">
+                    <input type="submit" th:value="#{message.logout}" class="btn btn-default" style="margin-top:20px">
+                </form>
+            </div>
         </div>
-        <form action="/login" method="GET">
-            <input type="submit" th:value="#{message.logout}" class="btn btn-default" style="margin-top:20px"
-                   ng-disabled="form.$invalid">
-        </form>
     </div>
 </div>
 
 <div class="container" style="margin-top: 50px">
     <div class="row">
-        <div class="col-md-4 col-md-offset-2">
-            <h2 th:text="#{message.app.welcome}" class="page-header" style="color: forestgreen"></h2>
-            <div>
-
+        <div class="col-md-12 col-md-offset-2">
+            <h4 th:if="${appointmentPresent == false}" th:text="#{message.appoint.not.present}"></h4>
+            <h4 th:if="${confirmed}" th:text="#{message.appoint.confirmed}"></h4>
+            <div id="appointments" th:if="${appointmentPresent == true}">
+                <table class="table">
+                    <tr>
+                        <th th:text="#{message.route.number}"></th>
+                        <th th:text="#{message.route.departure}"></th>
+                        <th th:text="#{message.route.arrival}"></th>
+                        <th th:text="#{message.bus.license.plate}"></th>
+                        <th th:text="#{message.bus.mark}"></th>
+                    </tr>
+                    <tr>
+                        <td th:text="${appointmentDto.routeNumber}"></td>
+                        <td th:if="${#locale.getLanguage().equals('en')}"
+                            th:text="${appointmentDto.routeDeparture}"></td>
+                        <td th:if="${#locale.getLanguage().equals('uk')}"
+                            th:text="${appointmentDto.routeDepartureUk}"></td>
+                        <td th:if="${#locale.getLanguage().equals('en')}"
+                            th:text="${appointmentDto.routeArrival}"></td>
+                        <td th:if="${#locale.getLanguage().equals('uk')}"
+                            th:text="${appointmentDto.routeArrivalUk}"></td>
+                        <td th:text="${appointmentDto.busLicensePlate}"></td>
+                        <td th:text="${appointmentDto.busMark}"></td>
+                        <td>
+                            <form action="/driver" method="post">
+                                <input type="hidden" name="appointmentId" th:value="${appointmentDto.id}">
+                                <input type="submit" th:value="#{message.route.confirm}"
+                                       class="btn btn-default">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

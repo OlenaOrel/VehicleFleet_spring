@@ -8,10 +8,12 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppointmentDto {
-    private int routeNumber;
+    private Long id;
+    private Integer routeNumber;
     private String routeDeparture;
     private String routeDepartureUk;
     private String routeArrival;
