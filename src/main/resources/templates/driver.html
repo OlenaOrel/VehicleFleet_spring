@@ -7,12 +7,10 @@
     <title>Vehicle fleet</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!--    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>-->
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>-->
 </head>
 <body ng-app="login_form" ng-controller="AppCtrl">
 <div class="col-md-8 col-md-offset-2">
-    <h1 th:text="#{app.name}" style="color: cornflowerblue"/>
+    <h1 th:text="#{message.app.name}" style="color: cornflowerblue"/>
     <h3 th:if="${#locale.getLanguage().equals('en')}"
         th:text="'Driver:' + ${user.firstName} + ' ' + ${user.lastName} "
         style="color: cornflowerblue"></h3>
@@ -24,7 +22,7 @@
             <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
         </div>
         <form action="/login" method="GET">
-            <input type="submit" th:value="#{logout}" class="btn btn-default" style="margin-top:20px"
+            <input type="submit" th:value="#{message.logout}" class="btn btn-default" style="margin-top:20px"
                    ng-disabled="form.$invalid">
         </form>
     </div>
@@ -33,44 +31,12 @@
 <div class="container" style="margin-top: 50px">
     <div class="row">
         <div class="col-md-4 col-md-offset-2">
-            <h2 th:text="#{app.welcome}" class="page-header" style="color: forestgreen"></h2>
+            <h2 th:text="#{message.app.welcome}" class="page-header" style="color: forestgreen"></h2>
             <div>
-                <div th:if="${routeDTO == null}"
-                     th:text="#{route.not.appointed}">
-                </div>
-                <div th:if="${routeDTO != null}">
-                    <table class="table">
-                        <tr>
-                            <th th:text="#{route.number}"></th>
-                            <th th:text="#{route.departure}"></th>
-                            <th th:text="#{route.arrival}"></th>
-                            <th th:text="#{bus.mark}"></th>
-                            <th th:text="#{bus.license.plate}"></th>
-                        </tr>
-                        <tr th:if="${#locale.getLanguage().equals('en')}">
-                            <th th:text="${routeDTO.number}"></th>
-                            <th th:text="${routeDTO.departureFromCityEn}"></th>
-                            <th th:text="${routeDTO.arrivalToCityEn}"></th>
-                            <th th:text="${routeDTO.busMark}"></th>
-                            <th th:text="${routeDTO.busLicensePlate}"></th>
-                        </tr>
-                        <tr th:if="${#locale.getLanguage().equals('uk')}">
-                            <th th:text="${routeDTO.number}"></th>
-                            <th th:text="${routeDTO.departureFromCityUk}"></th>
-                            <th th:text="${routeDTO.arrivalToCityUk}"></th>
-                            <th th:text="${routeDTO.busMark}"></th>
-                            <th th:text="${routeDTO.busLicensePlate}"></th>
-                        </tr>
-                    </table>
-                    <form action="/driver" method="GET">
-                        <input type="submit" th:value="#{route.confirm}" class="btn btn-default" style="margin-top:20px"
-                               ng-disabled="form.$invalid">
-                    </form>
-                </div>
+
             </div>
         </div>
     </div>
 </div>
-<!--<script type="text/javascript" src="/public/js/login.js"></script>-->
 </body>
 </html>

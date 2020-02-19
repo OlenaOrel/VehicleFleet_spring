@@ -15,7 +15,7 @@ import ua.training.vehicle_fleet.service.RegistrationService;
 
 @Slf4j
 @Controller
-@RequestMapping( "/register" )
+@RequestMapping("/register")
 public class RegisterController {
     private final RegistrationService regService;
 
@@ -25,7 +25,7 @@ public class RegisterController {
     }
 
     @PostMapping
-    public String registrationFormController( UserRegisterDTO user ) {
+    public String registrationFormController(UserRegisterDTO user) {
         log.info("{}", user);
         if (isInputValid(user)) {
             try {
@@ -52,8 +52,8 @@ public class RegisterController {
     private boolean isInputValid(UserRegisterDTO user) {
         if (user.getFirstName() == null || user.getLastName() == null
                 || user.getOriginFirstName() == null || user.getOriginLastName() == null
-                || user.getLogin() == null || user.getEmail() == null
-                || user.getPassword() == null || user.getConfirmPassword() == null) {
+                || user.getEmail() == null || user.getPassword() == null
+                || user.getConfirmPassword() == null) {
 
             return false;
         }
@@ -62,7 +62,6 @@ public class RegisterController {
                 && user.getLastName().matches(RegexConstants.NAME_EN)
                 && user.getOriginFirstName().matches(RegexConstants.NAME_UK)
                 && user.getOriginLastName().matches(RegexConstants.NAME_UK)
-                && user.getLogin().matches(RegexConstants.LOGIN)
                 && user.getEmail().matches(RegexConstants.EMAIL)
                 && user.getPassword().equals(user.getConfirmPassword());
     }

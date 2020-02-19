@@ -1,33 +1,30 @@
 package ua.training.vehicle_fleet.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "buses",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"number_plate"})})
+@Table(name = "bus",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"license_plate"})})
 public class Bus {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(nullable = false, length = 50)
     private String mark;
-    @Column(name = "number_plate", nullable = false)
+    @Column(name = "license_plate", unique = true, nullable = false, length = 20)
     private String licensePlate;
-    @Column(nullable = false)
-    private Boolean free;
-
-    @ManyToMany(mappedBy = "busSet")
-    private Set<User> drivers;
-
-    @ManyToMany(mappedBy = "busSet")
-    private Set<Route> routeSet;
+    @OneToMany
+    @JoinColumn(name = "bus_id", referencedColumnName = "id")
+    private List<Appointment> appointments;
+    @ManyToMany(mappedBy = "busList")
+    private List<User> drivers;
 }

@@ -1,60 +1,40 @@
 package ua.training.vehicle_fleet.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "routes")
+@Table(name = "route")
 public class Route {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
-    private Integer numberOfRoute;
+    private Integer number;
 
-    @Column(name = "departure_from_city", nullable = false)
+    @Column(name = "departure_from_city", nullable = false, length = 50)
     private String departureFromCityEn;
 
-    @Column(name = "arival_to_city", nullable = false)
+    @Column(name = "arival_to_city", nullable = false, length = 50)
     private String arrivalToCityEn;
 
-    @Column(name = "departure_from_city_uk", nullable = false)
+    @Column(name = "departure_from_city_uk", nullable = false, length = 50)
     private String departureFromCityUk;
 
-    @Column(name = "arival_to_city_uk", nullable = false)
+    @Column(name = "arival_to_city_uk", nullable = false, length = 50)
     private String arrivalToCityUk;
 
-    @Column(nullable = false)
-    private LocalDate date;
-
-    @Column(nullable = false)
-    private Boolean finished;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private RouteStatus status;
-
-    @ManyToMany(mappedBy = "routeSet")
-    private Set<User> drivers;
-
-    @ManyToMany
-    @JoinTable(
-            name = "buses_on_routs",
-            joinColumns = {@JoinColumn(name = "route_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "bus_id", referencedColumnName = "id")}
-    )
-    private Set<Bus> busSet;
-
+    @OneToMany
+    @JoinColumn(name = "route_id", referencedColumnName = "id")
+    private List<Appointment> appointments;
 }

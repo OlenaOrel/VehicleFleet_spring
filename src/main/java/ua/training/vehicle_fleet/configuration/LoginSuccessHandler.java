@@ -16,27 +16,27 @@ import java.util.Collection;
 @Configuration
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Override
-    protected void handle( HttpServletRequest request,
+    protected void handle(HttpServletRequest request,
                           HttpServletResponse response,
-                          Authentication authentication ) throws IOException {
-        String targetUrl = determineTargetUrl( authentication );
+                          Authentication authentication) throws IOException {
+        String targetUrl = determineTargetUrl(authentication);
 
-        if ( response.isCommitted() ) {
+        if (response.isCommitted()) {
             return;
         }
 
         RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-        redirectStrategy.sendRedirect( request, response, targetUrl );
+        redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-    private String determineTargetUrl( Authentication authentication ) {
+    private String determineTargetUrl(Authentication authentication) {
         String url = "/login?error=true";
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        UserRole role = ( UserRole ) authorities.iterator().next();
-        if ( role.equals( UserRole.ROLE_ADMIN ) ) {
+        UserRole role = (UserRole) authorities.iterator().next();
+        if (role.equals(UserRole.ROLE_ADMIN)) {
             url = "/admin";
         }
-        if ( role.equals( UserRole.ROLE_DRIVER ) ) {
+        if (role.equals(UserRole.ROLE_DRIVER)) {
             url = "/driver";
         }
         return url;

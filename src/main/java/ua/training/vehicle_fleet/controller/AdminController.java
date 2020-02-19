@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.vehicle_fleet.entity.User;
 
 @Controller
-@RequestMapping( value = "/admin" )
+@RequestMapping(value = "/admin")
 public class AdminController {
 
     @GetMapping
-    public String adminView( @RequestParam( value = "error", required = false ) String error,
-                            @RequestParam( value = "logout", required = false ) String logout,
+    public String adminView(@RequestParam(value = "error", required = false) String error,
+                            @RequestParam(value = "logout", required = false) String logout,
                             Authentication authentication,
-                            Model model ) {
-        User user = ( User ) authentication.getPrincipal();
-        model.addAttribute( "user", user );
-        model.addAttribute( "error", error != null );
-        model.addAttribute( "logout", logout != null );
+                            Model model) {
+        User user = (User) authentication.getPrincipal();
+        model.addAttribute("user", user);
+        model.addAttribute("error", error != null);
+        model.addAttribute("logout", logout != null);
         return "admin";
     }
 }

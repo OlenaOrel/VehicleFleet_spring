@@ -14,5 +14,5 @@ public interface RouteRepository extends JpaRepository<Route, Long> {
 
     Optional<Route> findById(Long id);
 
-    Optional<Route> findByNumberOfRoute(Integer numberOfRoute);
+    Optional<Route> findByNumber(Integer numberOfRoute);
 }
