@@ -29,10 +29,14 @@
                     <div class="col-md-6 col-md-offset-6">
                         <form th:action="@{/register}" method="post">
                             <fieldset>
-                                <div th:if="${param.error}" class="alert alert-error"
-                                     th:text="#{message.invalid.email.password}"
+                                <div th:if="${param.invalid_input}" class="alert alert-error"
+                                     th:text="#{message.register.invalid.input}"
                                      style="margin-top:20px; color: red"></div>
-                                <div class="data" th:if="${param.data}" th:text="#{message.data.sign.up}"
+                                <div th:if="${param.error}" class="alert alert-error"
+                                     th:text="#{message.register.error}"
+                                     style="margin-top:20px; color: red"></div>
+                                <div th:if="${param.pass_error}" class="alert alert-error"
+                                     th:text="#{message.register.pass.not.confirm}"
                                      style="margin-top:20px; color: red"></div>
 
                                 <label for="firstName" style="margin-top:20px">First name</label>
