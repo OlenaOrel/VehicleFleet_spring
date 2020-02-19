@@ -2,26 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
 >
-<head>
-    <meta charset="UTF-8">
-    <title th:text="#{message.registration.title}"></title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+<head th:replace="header::head"></head>
 <body>
-<div class="col-md-8 col-md-offset-2">
-    <h1 th:text="#{message.app.name}" style="color: cornflowerblue"/>
-    <div class="col-md-12 col-md-offset-10" align="right">
-        <div class="locale">
-            <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
-        </div>
-        <form action="/login" method="GET">
-            <input type="submit" th:value="#{message.login}"
-                   class="btn btn-default" style="margin-top:10px">
-        </form>
+<div th:replace="header::guest_head_head"></div>
 
-    </div>
-</div>
 <div class="container" style="margin-top: 60px">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
