@@ -36,7 +36,7 @@ public class RegisterController {
             }
             return "redirect:/login";
         }
-        return "redirect:/register?error=true";
+        return "redirect:/register?error.html=true";
     }
 
     @GetMapping

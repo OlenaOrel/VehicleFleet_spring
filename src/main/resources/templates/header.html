@@ -19,7 +19,7 @@
                         <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
                     </div>
                     <h5 sec:authentication="name" style="margin-top:20px"></h5>
-                    <form action="/login?logout=true" method="POST">
+                    <form action="/logout" method="post">
                         <input type="submit" th:value="#{message.logout}" class="btn btn-default"
                                style="margin-top:20px">
                     </form>
