@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Vehicle fleet</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <div class="container" style="margin-top: 60px">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-2">
+                <h1 th:text="#{message.app.name}" style="color: cornflowerblue"/>
+                <div align="right">
+                    <div class="locale">
+                        <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
+                    </div>
+                    <h4 sec:authentication="name"></h4>
+                    <form action="/login" method="POST">
+                        <input type="submit" th:value="#{message.logout}" class="btn btn-default"
+                               style="margin-top:20px">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</head>
+<body>
+<div class="container" style="margin-top: 50px">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-2">
+            <h3 th:if="${busList.isEmpty()}" th:text="#{message.empty.bus.list}"></h3>
+            <div id="appointments">
+                <table class="table" th:if="${!busList.isEmpty()}">
+                    <tr>
+                        <th th:text="#{message.bus.license.plate}"></th>
+                        <th th:text="#{message.bus.mark}"></th>
+                        <th th:text="#{message.bus.add}"></th>
+                    </tr>
+                    <tr th:each="bus : ${busList}">
+                        <td th:text="${bus.licensePlate}"></td>
+                        <td th:text="${bus.mark}"></td>
+                        <td>
+                            <form action="/admin/appoint/bus" method="post">
+                                <input type="hidden" name="busId" th:value="${bus.id}">
+                                <input type="submit" th:value="#{message.bus.add}"
+                                       class="btn btn-default">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

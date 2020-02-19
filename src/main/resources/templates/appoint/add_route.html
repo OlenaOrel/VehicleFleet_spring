@@ -30,43 +30,28 @@
 <div class="container" style="margin-top: 50px">
     <div class="row">
         <div class="col-md-12 col-md-offset-2">
-            <form action="/admin/appoint/route" method="get">
-                <input type="submit" th:value="#{message.route.appoint}" class="btn btn-default"
-                       style="margin-top:20px">
-            </form>
-            <br>
-            <div id="appointments">
-                <table class="table" th:if="${!appointmentDtoList.isEmpty()}">
+            <div id="routes">
+                <table class="table" th:if="${!routeList.isEmpty()}">
                     <tr>
                         <th th:text="#{message.route.number}"></th>
                         <th th:text="#{message.route.departure}"></th>
                         <th th:text="#{message.route.arrival}"></th>
-                        <th th:text="#{message.bus.license.plate}"></th>
-                        <th th:text="#{message.bus.mark}"></th>
-                        <th th:text="#{message.driver}"></th>
-                        <th th:text="#{message.appoint.finish}"></th>
+                        <th th:text="#{message.route.add}"></th>
                     </tr>
-                    <tr th:each="appointmentDto : ${appointmentDtoList}">
-                        <td th:text="${appointmentDto.routeNumber}"></td>
+                    <tr th:each="route : ${routeList}">
+                        <td th:text="${route.number}"></td>
                         <td th:if="${#locale.getLanguage().equals('en')}"
-                            th:text="${appointmentDto.routeDeparture}"></td>
+                            th:text="${route.departureFromCityEn}"></td>
                         <td th:if="${#locale.getLanguage().equals('uk')}"
-                            th:text="${appointmentDto.routeDepartureUk}"></td>
+                            th:text="${route.departureFromCityUk}"></td>
                         <td th:if="${#locale.getLanguage().equals('en')}"
-                            th:text="${appointmentDto.routeArrival}"></td>
+                            th:text="${route.arrivalToCityEn}"></td>
                         <td th:if="${#locale.getLanguage().equals('uk')}"
-                            th:text="${appointmentDto.routeArrivalUk}"></td>
-                        <td th:text="${appointmentDto.busLicensePlate}"></td>
-                        <td th:text="${appointmentDto.busMark}"></td>
-                        <td th:if="${#locale.getLanguage().equals('en')}"
-                            th:text="${appointmentDto.driverFullName}"></td>
-                        <td th:if="${#locale.getLanguage().equals('uk')}"
-                            th:text="${appointmentDto.driverFullNameUk}"></td>
+                            th:text="${route.arrivalToCityUk}"></td>
                         <td>
-                            <form action="/admin" method="post">
-                                <input type="hidden" name="routeNumber" th:value="${appointmentDto.routeNumber}">
-                                <input type="hidden" name="status" th:value="${appointmentDto.status}">
-                                <input type="submit" th:value="#{message.appoint.finish}"
+                            <form action="/admin/appoint/route" method="post">
+                                <input type="hidden" name="routeId" th:value="${route.id}">
+                                <input type="submit" th:value="#{message.route.add}"
                                        class="btn btn-default">
                             </form>
                         </td>
