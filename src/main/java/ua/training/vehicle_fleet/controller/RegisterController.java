@@ -17,6 +17,14 @@ import ua.training.vehicle_fleet.service.UserService;
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
+
+    private static final String PASS_NOT_CONFIRM = "redirect:/register?pass_error=true";
+    private static final String USER_EXISTS_ERROR = "redirect:/register?error=true";
+    private static final String LOGIN_PAGE = "redirect:/login";
+    public static final String INPUT_TRUE = "redirect:/register?invalid_input=true";
+    public static final String REGISTRATION_VIEW = "reg_form";
+
+
     private final UserService userService;
 
     @Autowired
@@ -28,23 +36,23 @@ public class RegisterController {
     public String registrationFormController(UserRegisterDTO user) {
         log.info("{}", user);
         if (isPassNotConfirm(user)) {
-            return "redirect:/register?pass_error=true";
+            return PASS_NOT_CONFIRM;
         }
         if (isInputValid(user)) {
             try {
                 userService.saveNewUser(user);
             } catch (UserExistException e) {
                 e.printMessage();
-                return "redirect:/register?error=true";
+                return USER_EXISTS_ERROR;
             }
-            return "redirect:/login";
+            return LOGIN_PAGE;
         }
-        return "redirect:/register?invalid_input=true";
+        return INPUT_TRUE;
     }
 
     @GetMapping
     public String registrationFormView() {
-        return "reg_form";
+        return REGISTRATION_VIEW;
     }
 
     @ExceptionHandler(RuntimeException.class)

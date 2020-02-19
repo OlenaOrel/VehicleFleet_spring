@@ -19,6 +19,9 @@ import ua.training.vehicle_fleet.service.AppointmentService;
 @RequestMapping(value = "/driver")
 public class DriverController {
 
+    public static final String DRIVER = "driver";
+    public static final String REDIRECT_DRIVER = "redirect:/driver";
+
     private final AppointmentService appointmentService;
 
     @Autowired
@@ -37,7 +40,7 @@ public class DriverController {
             model.addAttribute("appointmentNotPresent", true);
             log.warn(e.getMessage());
         }
-        return "driver";
+        return DRIVER;
     }
 
     @PostMapping
@@ -45,6 +48,6 @@ public class DriverController {
         if (appointmentId != null) {
             appointmentService.setStatusConfirmed(appointmentId);
         }
-        return "redirect:/driver";
+        return REDIRECT_DRIVER;
     }
 }

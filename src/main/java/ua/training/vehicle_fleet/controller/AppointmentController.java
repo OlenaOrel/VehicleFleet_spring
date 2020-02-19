@@ -12,14 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.vehicle_fleet.cache.AppointmentCache;
 import ua.training.vehicle_fleet.dto.AppointmentDto;
 import ua.training.vehicle_fleet.dto.AppointmentDtoConverter;
-import ua.training.vehicle_fleet.entity.*;
+import ua.training.vehicle_fleet.entity.Appointment;
+import ua.training.vehicle_fleet.entity.Bus;
+import ua.training.vehicle_fleet.entity.Route;
+import ua.training.vehicle_fleet.entity.User;
 import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.service.AppointmentService;
 import ua.training.vehicle_fleet.service.BusService;
 import ua.training.vehicle_fleet.service.RouteService;
 import ua.training.vehicle_fleet.service.UserService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -27,6 +29,14 @@ import java.util.List;
 @RequestMapping("/admin/appoint")
 public class AppointmentController {
 
+    public static final String REDIRECT_ADMIN_APPOINT_BUS = "redirect:/admin/appoint/bus";
+    public static final String APPOINT_ADD_BUS = "appoint/add_bus";
+    public static final String APPOINT_ADD_ROUTE = "appoint/add_route";
+    public static final String REDIRECT_ADMIN_APPOINT_DRIVER = "redirect:/admin/appoint/driver";
+    public static final String APPOINT_ADD_DRIVER = "appoint/add_driver";
+    public static final String REDIRECT_ADMIN_APPOINT_CONFIRM = "redirect:/admin/appoint/confirm";
+    public static final String APPOINT_CONFIRM = "appoint/confirm";
+    public static final String REDIRECT_ADMIN = "redirect:/admin";
     private final RouteService routeService;
     private final BusService busService;
     private final UserService userService;
@@ -49,7 +59,7 @@ public class AppointmentController {
         List<Route> routeList = routeService.getNotAppointRoute();
         model.addAttribute("routeList", routeList);
         log.info("size of route list: {}", routeList.size());
-        return "appoint/add_route";
+        return APPOINT_ADD_ROUTE;
     }
 
 
@@ -58,15 +68,13 @@ public class AppointmentController {
         Appointment appointment = new Appointment();
         log.info("Route id: {}", routeId);
         try {
-            Route route = routeService.getRouteById(routeId);
-            log.info("Route: {}", route);
-            appointment.setRoute(route);
+            appointment.setRoute(routeService.getRouteById(routeId));
             appointmentCache.getAppointmentCache().putIfAbsent(user.getId(), appointment);
             log.info("AppointmentCache route = {}", appointmentCache.getAppointmentCache().get(user.getId()).getRoute());
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
         }
-        return "redirect:/admin/appoint/bus";
+        return REDIRECT_ADMIN_APPOINT_BUS;
     }
 
     @GetMapping(value = "/bus")
@@ -74,7 +82,7 @@ public class AppointmentController {
         List<Bus> busList = busService.getNotAppointedBuses();
         model.addAttribute("busList", busList);
         log.info("size of route list: {}", busList.size());
-        return "appoint/add_bus";
+        return APPOINT_ADD_BUS;
     }
 
     @PostMapping(value = "/bus")
@@ -90,16 +98,16 @@ public class AppointmentController {
             } catch (EntityNotFoundException e) {
                 e.printStackTrace();
             }
-            return "redirect:/admin/appoint/driver";
+            return REDIRECT_ADMIN_APPOINT_DRIVER;
         }
-        return "appoint/add_bus";
+        return APPOINT_ADD_BUS;
     }
 
     @GetMapping(value = "/driver")
     public String addDriverView(Model model) {
         List<User> driverList = userService.getNotAppointDriverForBus();
         model.addAttribute("driverList", driverList);
-        return "appoint/add_driver";
+        return APPOINT_ADD_DRIVER;
     }
 
 
@@ -114,9 +122,9 @@ public class AppointmentController {
             } catch (EntityNotFoundException e) {
                 e.printStackTrace();
             }
-            return "redirect:/admin/appoint/confirm";
+            return REDIRECT_ADMIN_APPOINT_CONFIRM;
         }
-        return "appoint/add_driver";
+        return APPOINT_ADD_DRIVER;
     }
 
     @GetMapping(value = "/confirm")
@@ -125,7 +133,7 @@ public class AppointmentController {
         log.info("Appointment is ready to confirm: {}", appointment);
         AppointmentDto appointmentDTO = converter.convertToDto(appointment);
         model.addAttribute("appointmentDTO", appointmentDTO);
-        return "appoint/confirm";
+        return APPOINT_CONFIRM;
     }
 
 
@@ -133,12 +141,10 @@ public class AppointmentController {
     public String confirmAppointment(@RequestParam(required = false) boolean confirm, @AuthenticationPrincipal User user) {
         if (confirm) {
             Appointment appointment = appointmentCache.getAppointmentCache().get(user.getId());
-            appointment.setStatus(AppointmentStatus.NEW);
-            appointment.setDate(LocalDate.now());
             appointmentService.saveAppointment(appointment);
             appointmentCache.getAppointmentCache().remove(user.getId());
-            return "redirect:/admin";
+            return REDIRECT_ADMIN;
         }
-        return "appoint/confirm";
+        return APPOINT_CONFIRM;
     }
 }

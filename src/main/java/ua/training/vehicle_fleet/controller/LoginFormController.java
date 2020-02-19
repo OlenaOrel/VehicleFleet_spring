@@ -14,6 +14,8 @@ import ua.training.vehicle_fleet.service.UserService;
 @RequestMapping(value = "/login")
 public class LoginFormController {
 
+    public static final String LOGIN = "login";
+
     private final UserService userService;
 
     @Autowired
@@ -27,6 +29,6 @@ public class LoginFormController {
                             Model model) {
         model.addAttribute("error", error != null);
         model.addAttribute("logout", logout != null);
-        return "login";
+        return LOGIN;
     }
 }

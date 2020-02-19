@@ -40,6 +40,8 @@ public class AppointmentService {
     }
 
     public void saveAppointment(Appointment appointment) {
+        appointment.setStatus(AppointmentStatus.NEW);
+        appointment.setDate(LocalDate.now());
         repository.save(appointment);
     }
 
