@@ -43,6 +43,7 @@ public class AppointmentDtoConverter {
                 .routeArrival(appointment.getRoute().getArrivalToCityEn())
                 .routeArrivalUk(appointment.getRoute().getArrivalToCityUk())
                 .busLicensePlate(appointment.getBus().getLicensePlate())
+                .busMark(appointment.getBus().getMark())
                 .driverFullName(fullName)
                 .driverFullNameUk(fullNameUk)
                 .date(appointment.getDate())

@@ -3,6 +3,8 @@ package ua.training.vehicle_fleet.service;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.training.vehicle_fleet.entity.Appointment;
@@ -54,5 +56,9 @@ public class AppointmentService {
     @Transactional
     public void setStatusConfirmed(@NonNull Long appointmentId) {
         repository.updateStatusById(AppointmentStatus.CONFIRMED, appointmentId);
+    }
+
+    public Page<Appointment> getAllForPage(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }

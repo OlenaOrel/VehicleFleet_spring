@@ -2,6 +2,10 @@ package ua.training.vehicle_fleet.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.vehicle_fleet.dto.AppointmentDto;
 import ua.training.vehicle_fleet.dto.AppointmentDtoConverter;
+import ua.training.vehicle_fleet.entity.Appointment;
 import ua.training.vehicle_fleet.entity.AppointmentStatus;
+import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.service.AppointmentService;
 
 import java.util.List;
@@ -45,12 +51,24 @@ public class AdminController {
                             Model model) {
         log.info("route number: {}, status: {}", routeNumber, status);
         if (routeNumber != null && status != null) {
-            appointmentService.doFinish(routeNumber, status);
+            try {
+                appointmentService.doFinish(routeNumber, status);
+            } catch (EntityNotFoundException e) {
+                log.warn(e.getMessage());
+            }
             List<AppointmentDto> appointmentDtoList = converter
                     .covertAllToDto(appointmentService.getNotFinishedAppointment());
             model.addAttribute("appointmentDtoList", appointmentDtoList);
         }
         return "admin";
+    }
+
+    @GetMapping("/history")
+    public String appointmentHistory(@PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable,
+                                     Model model) {
+        Page<Appointment> page = appointmentService.getAllForPage(pageable);
+        model.addAttribute("page", page);
+        return "appoint/history";
     }
 
 }
