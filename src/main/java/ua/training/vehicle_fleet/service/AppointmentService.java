@@ -7,11 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.training.vehicle_fleet.dto.AppointmentDto;
+import ua.training.vehicle_fleet.dto.AppointmentDtoConverter;
 import ua.training.vehicle_fleet.entity.Appointment;
 import ua.training.vehicle_fleet.entity.AppointmentStatus;
 import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.repository.AppointmentRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -19,10 +22,12 @@ import java.util.List;
 public class AppointmentService {
 
     private final AppointmentRepository repository;
+    private final AppointmentDtoConverter converter;
 
     @Autowired
-    public AppointmentService(AppointmentRepository repository) {
+    public AppointmentService(AppointmentRepository repository, AppointmentDtoConverter converter) {
         this.repository = repository;
+        this.converter = converter;
     }
 
     public List<Appointment> getNotFinishedAppointment() {
@@ -48,9 +53,13 @@ public class AppointmentService {
         repository.save(appointment);
     }
 
-    public Appointment getAppointmentForDriver(@NonNull Long driverId) throws EntityNotFoundException {
-        return repository.findByStatusAndDriver_id(AppointmentStatus.NEW, driverId).orElseThrow(() ->
-                new EntityNotFoundException("Appointment for driver id = " + driverId + "not found"));
+    public AppointmentDto getAppointmentForDriver(@NonNull Long driverId) throws EntityNotFoundException {
+        LocalDate date = LocalDate.now();
+        return converter.convertToDto(
+                repository.findByDateAndDriver_id(date, driverId).orElseThrow(() ->
+                        new EntityNotFoundException("Appointment for driver id = " + driverId + "not found")
+                )
+        );
     }
 
     @Transactional

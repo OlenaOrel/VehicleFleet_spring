@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.vehicle_fleet.dto.AppointmentDto;
 import ua.training.vehicle_fleet.dto.AppointmentDtoConverter;
-import ua.training.vehicle_fleet.entity.Appointment;
 import ua.training.vehicle_fleet.entity.User;
 import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.service.AppointmentService;
@@ -33,14 +32,14 @@ public class DriverController {
     @GetMapping
     public String driverView(@AuthenticationPrincipal User user, Model model) {
         try {
-            Appointment appointment = appointmentService.getAppointmentForDriver(user.getId());
-            model.addAttribute("appointmentPresent", true);
-            AppointmentDto appointmentDto = converter.convertToDto(appointment);
+            AppointmentDto appointmentDto = appointmentService.getAppointmentForDriver(user.getId());
             model.addAttribute("appointmentDto", appointmentDto);
+            log.info("Driver appointment: {}", appointmentDto);
         } catch (EntityNotFoundException e) {
-            model.addAttribute("appointmentPresent", false);
+            model.addAttribute("appointmentNotPresent", true);
             log.warn(e.getMessage());
         }
+        model.addAttribute("confirmed", false);
         return "driver";
     }
 
@@ -51,6 +50,6 @@ public class DriverController {
             appointmentService.setStatusConfirmed(appointmentId);
             model.addAttribute("confirmed", true);
         }
-        return "driver";
+        return "redirect:/driver";
     }
 }
