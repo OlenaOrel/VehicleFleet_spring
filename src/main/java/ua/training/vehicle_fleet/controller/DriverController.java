@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.vehicle_fleet.dto.AppointmentDto;
-import ua.training.vehicle_fleet.dto.AppointmentDtoConverter;
-import ua.training.vehicle_fleet.entity.Appointment;
 import ua.training.vehicle_fleet.entity.User;
 import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.service.AppointmentService;
@@ -21,36 +19,35 @@ import ua.training.vehicle_fleet.service.AppointmentService;
 @RequestMapping(value = "/driver")
 public class DriverController {
 
+    public static final String DRIVER = "driver";
+    public static final String REDIRECT_DRIVER = "redirect:/driver";
+
     private final AppointmentService appointmentService;
-    private final AppointmentDtoConverter converter;
 
     @Autowired
-    public DriverController(AppointmentService appointmentService, AppointmentDtoConverter converter) {
+    public DriverController(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
-        this.converter = converter;
     }
 
     @GetMapping
     public String driverView(@AuthenticationPrincipal User user, Model model) {
         try {
-            Appointment appointment = appointmentService.getAppointmentForDriver(user.getId());
-            model.addAttribute("appointmentPresent", true);
-            AppointmentDto appointmentDto = converter.convertToDto(appointment);
+            AppointmentDto appointmentDto = appointmentService.getAppointmentForDriver(user.getId());
             model.addAttribute("appointmentDto", appointmentDto);
+            model.addAttribute("appointmentNotPresent", false);
+            log.info("Driver appointment: {}", appointmentDto);
         } catch (EntityNotFoundException e) {
-            model.addAttribute("appointmentPresent", false);
+            model.addAttribute("appointmentNotPresent", true);
             log.warn(e.getMessage());
         }
-        return "driver";
+        return DRIVER;
     }
 
     @PostMapping
-    public String confirmAppointment(@RequestParam(required = false) Long appointmentId,
-                                     Model model) {
+    public String confirmAppointment(@RequestParam(required = false) Long appointmentId) {
         if (appointmentId != null) {
             appointmentService.setStatusConfirmed(appointmentId);
-            model.addAttribute("confirmed", true);
         }
-        return "driver";
+        return REDIRECT_DRIVER;
     }
 }

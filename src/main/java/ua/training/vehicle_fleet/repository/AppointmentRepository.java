@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import ua.training.vehicle_fleet.entity.Appointment;
 import ua.training.vehicle_fleet.entity.AppointmentStatus;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,6 @@ public interface AppointmentRepository extends Repository<Appointment, Long> {
     @Query("update Appointment t set t.status = :status where t.id = :id")
     void updateStatusById(@Param("status") AppointmentStatus status, @Param("id") Long id);
 
-    Optional<Appointment> findByStatusAndDriver_id(AppointmentStatus status, Long id);
+    Optional<Appointment> findByDateAndDriver_id(LocalDate date, Long id);
 
 }

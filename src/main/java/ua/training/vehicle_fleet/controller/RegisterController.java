@@ -11,37 +11,48 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.training.vehicle_fleet.dto.UserRegisterDTO;
 import ua.training.vehicle_fleet.exception.UserExistException;
-import ua.training.vehicle_fleet.service.RegistrationService;
+import ua.training.vehicle_fleet.service.UserService;
 
 @Slf4j
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
-    private final RegistrationService regService;
+
+    private static final String PASS_NOT_CONFIRM = "redirect:/register?pass_error=true";
+    private static final String USER_EXISTS_ERROR = "redirect:/register?error=true";
+    private static final String LOGIN_PAGE = "redirect:/login";
+    public static final String INPUT_TRUE = "redirect:/register?invalid_input=true";
+    public static final String REGISTRATION_VIEW = "reg_form";
+
+
+    private final UserService userService;
 
     @Autowired
-    public RegisterController(RegistrationService regService) {
-        this.regService = regService;
+    public RegisterController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
     public String registrationFormController(UserRegisterDTO user) {
         log.info("{}", user);
+        if (isPassNotConfirm(user)) {
+            return PASS_NOT_CONFIRM;
+        }
         if (isInputValid(user)) {
             try {
-                regService.saveNewUser(user);
+                userService.saveNewUser(user);
             } catch (UserExistException e) {
                 e.printMessage();
-                return "reg_form";
+                return USER_EXISTS_ERROR;
             }
-            return "login";
+            return LOGIN_PAGE;
         }
-        return "redirect:/register?error=true";
+        return INPUT_TRUE;
     }
 
     @GetMapping
     public String registrationFormView() {
-        return "reg_form";
+        return REGISTRATION_VIEW;
     }
 
     @ExceptionHandler(RuntimeException.class)
@@ -62,7 +73,10 @@ public class RegisterController {
                 && user.getLastName().matches(RegexConstants.NAME_EN)
                 && user.getOriginFirstName().matches(RegexConstants.NAME_UK)
                 && user.getOriginLastName().matches(RegexConstants.NAME_UK)
-                && user.getEmail().matches(RegexConstants.EMAIL)
-                && user.getPassword().equals(user.getConfirmPassword());
+                && user.getEmail().matches(RegexConstants.EMAIL);
+    }
+
+    private boolean isPassNotConfirm(UserRegisterDTO user) {
+        return !user.getPassword().equals(user.getConfirmPassword());
     }
 }

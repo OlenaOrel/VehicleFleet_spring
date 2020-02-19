@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.vehicle_fleet.dto.AppointmentDto;
 import ua.training.vehicle_fleet.dto.AppointmentDtoConverter;
 import ua.training.vehicle_fleet.entity.Appointment;
-import ua.training.vehicle_fleet.entity.AppointmentStatus;
 import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.service.AppointmentService;
 
@@ -25,6 +24,9 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
+
+    public static final String ADMIN = "admin";
+    public static final String APPOINT_HISTORY = "appoint/history";
 
     private final AppointmentService appointmentService;
     private final AppointmentDtoConverter converter;
@@ -42,17 +44,16 @@ public class AdminController {
         List<AppointmentDto> appointmentDtoList = converter
                 .covertAllToDto(appointmentService.getNotFinishedAppointment());
         model.addAttribute("appointmentDtoList", appointmentDtoList);
-        return "admin";
+        return ADMIN;
     }
 
     @PostMapping
-    public String adminMain(@RequestParam(required = false) Integer routeNumber,
-                            @RequestParam(required = false) AppointmentStatus status,
+    public String adminMain(@RequestParam(required = false) Long appointmentId,
                             Model model) {
-        log.info("route number: {}, status: {}", routeNumber, status);
-        if (routeNumber != null && status != null) {
+        if (appointmentId != null) {
+            log.info("Finish appointment id = {}", appointmentId);
             try {
-                appointmentService.doFinish(routeNumber, status);
+                appointmentService.doFinish(appointmentId);
             } catch (EntityNotFoundException e) {
                 log.warn(e.getMessage());
             }
@@ -60,7 +61,7 @@ public class AdminController {
                     .covertAllToDto(appointmentService.getNotFinishedAppointment());
             model.addAttribute("appointmentDtoList", appointmentDtoList);
         }
-        return "admin";
+        return ADMIN;
     }
 
     @GetMapping("/history")
@@ -68,7 +69,7 @@ public class AdminController {
                                      Model model) {
         Page<Appointment> page = appointmentService.getAllForPage(pageable);
         model.addAttribute("page", page);
-        return "appoint/history";
+        return APPOINT_HISTORY;
     }
 
 }

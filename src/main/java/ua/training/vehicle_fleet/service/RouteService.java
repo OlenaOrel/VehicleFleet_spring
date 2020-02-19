@@ -14,9 +14,9 @@ import java.util.List;
 @Service
 public class RouteService {
 
-    @Autowired
     private final RouteRepository routeRepository;
 
+    @Autowired
     public RouteService(RouteRepository routeRepository) {
         this.routeRepository = routeRepository;
     }

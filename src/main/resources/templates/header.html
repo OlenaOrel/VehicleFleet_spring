@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title th:text="#{message.app.name}"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<div th:fragment="user_head">
+    <div class="container" style="margin-top: 60px">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-2">
+                <h1 th:text="#{message.app.name}" style="color: cornflowerblue"/>
+                <div align="right">
+                    <div class="locale">
+                        <a href="?lang=en">EN</a>|<a href="?lang=uk">UA</a>
+                    </div>
+                    <h5 sec:authentication="name" style="margin-top:20px"></h5>
+                    <form action="/logout" method="post">
+                        <input type="submit" th:value="#{message.logout}" class="btn btn-default"
+                               style="margin-top:20px">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
