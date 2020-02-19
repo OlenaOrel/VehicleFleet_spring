@@ -8,13 +8,13 @@
 <div class="container" style="margin-top: 50px">
     <div class="row">
         <div class="col-md-12 col-md-offset-2">
+            <div>
+                <form action="/admin" method="get">
+                    <input type="submit" th:value="#{message.main.page}" class="btn btn-default"
+                           style="margin-top:20px">
+                </form>
+            </div>
             <div id="appointment history">
-                <div>
-                    <form action="/admin" method="get">
-                        <input type="submit" th:value="#{message.main.page}" class="btn btn-default"
-                               style="margin-top:20px">
-                    </form>
-                </div>
                 <table class="table" style="margin-top:20px">
                     <tr>
                         <th th:text="#{message.route.number}"></th>
@@ -42,8 +42,13 @@
                             th:text="${appointment.driver.firstName} + ' ' + ${appointment.driver.lastName}"></td>
                         <td th:if="${#locale.getLanguage().equals('uk')}"
                             th:text="${appointment.driver.originFirstName} + ' ' + ${appointment.driver.originLastName}"></td>
-                        <td th:text="${appointment.date}"></td>
-                        <td th:text="${appointment.status}"></td>
+                        <td th:text="${#temporals.format(appointment.date, 'dd.MM.yyyy')}"></td>
+                        <td th:if="${appointment.status.name() == 'NEW'}"
+                            th:text="#{message.appointment.status.new}"></td>
+                        <td th:if="${appointment.status.name() == 'CONFIRMED'}"
+                            th:text="#{message.appointment.status.confirmed}"></td>
+                        <td th:if="${appointment.status.name() == 'FINISHED'}"
+                            th:text="#{message.appointment.status.finished}"></td>
                     </tr>
                 </table>
                 <nav th:if="${page.totalPages > 1}">

@@ -35,18 +35,8 @@ public class AppointmentService {
     }
 
     @Transactional
-    public void doFinish(@NonNull Integer routeNumber,
-                         @NonNull AppointmentStatus status) throws EntityNotFoundException {
-        repository.updateStatusById(AppointmentStatus.FINISHED,
-                getByStatusAndRouteNumber(routeNumber, status).getId());
-
-    }
-
-    private Appointment getByStatusAndRouteNumber(Integer routeNumber,
-                                                  AppointmentStatus status) throws EntityNotFoundException {
-        return repository.findByStatusAndRoute_Number(status, routeNumber).orElseThrow(() ->
-                new EntityNotFoundException("Appointment with route number = " + routeNumber +
-                        "and status = " + status + "not found"));
+    public void doFinish(@NonNull Long appointmentId) throws EntityNotFoundException {
+        repository.updateStatusById(AppointmentStatus.FINISHED, appointmentId);
     }
 
     public void saveAppointment(Appointment appointment) {

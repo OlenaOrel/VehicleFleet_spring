@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.vehicle_fleet.dto.AppointmentDto;
-import ua.training.vehicle_fleet.dto.AppointmentDtoConverter;
 import ua.training.vehicle_fleet.entity.User;
 import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.service.AppointmentService;
@@ -21,12 +20,10 @@ import ua.training.vehicle_fleet.service.AppointmentService;
 public class DriverController {
 
     private final AppointmentService appointmentService;
-    private final AppointmentDtoConverter converter;
 
     @Autowired
-    public DriverController(AppointmentService appointmentService, AppointmentDtoConverter converter) {
+    public DriverController(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
-        this.converter = converter;
     }
 
     @GetMapping
@@ -34,21 +31,19 @@ public class DriverController {
         try {
             AppointmentDto appointmentDto = appointmentService.getAppointmentForDriver(user.getId());
             model.addAttribute("appointmentDto", appointmentDto);
+            model.addAttribute("appointmentNotPresent", false);
             log.info("Driver appointment: {}", appointmentDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("appointmentNotPresent", true);
             log.warn(e.getMessage());
         }
-        model.addAttribute("confirmed", false);
         return "driver";
     }
 
     @PostMapping
-    public String confirmAppointment(@RequestParam(required = false) Long appointmentId,
-                                     Model model) {
+    public String confirmAppointment(@RequestParam(required = false) Long appointmentId) {
         if (appointmentId != null) {
             appointmentService.setStatusConfirmed(appointmentId);
-            model.addAttribute("confirmed", true);
         }
         return "redirect:/driver";
     }

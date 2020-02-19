@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.training.vehicle_fleet.dto.UserRegisterDTO;
 import ua.training.vehicle_fleet.exception.UserExistException;
-import ua.training.vehicle_fleet.service.RegistrationService;
+import ua.training.vehicle_fleet.service.UserService;
 
 @Slf4j
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
-    private final RegistrationService regService;
+    private final UserService userService;
 
     @Autowired
-    public RegisterController(RegistrationService regService) {
-        this.regService = regService;
+    public RegisterController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
@@ -29,12 +29,12 @@ public class RegisterController {
         log.info("{}", user);
         if (isInputValid(user)) {
             try {
-                regService.saveNewUser(user);
+                userService.saveNewUser(user);
             } catch (UserExistException e) {
                 e.printMessage();
                 return "reg_form";
             }
-            return "login";
+            return "redirect:/login";
         }
         return "redirect:/register?error=true";
     }

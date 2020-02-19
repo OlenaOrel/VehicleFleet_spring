@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.vehicle_fleet.dto.AppointmentDto;
 import ua.training.vehicle_fleet.dto.AppointmentDtoConverter;
 import ua.training.vehicle_fleet.entity.Appointment;
-import ua.training.vehicle_fleet.entity.AppointmentStatus;
 import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.service.AppointmentService;
 
@@ -46,13 +45,12 @@ public class AdminController {
     }
 
     @PostMapping
-    public String adminMain(@RequestParam(required = false) Integer routeNumber,
-                            @RequestParam(required = false) AppointmentStatus status,
+    public String adminMain(@RequestParam(required = false) Long appointmentId,
                             Model model) {
-        log.info("route number: {}, status: {}", routeNumber, status);
-        if (routeNumber != null && status != null) {
+        if (appointmentId != null) {
+            log.info("Finish appointment id = {}", appointmentId);
             try {
-                appointmentService.doFinish(routeNumber, status);
+                appointmentService.doFinish(appointmentId);
             } catch (EntityNotFoundException e) {
                 log.warn(e.getMessage());
             }

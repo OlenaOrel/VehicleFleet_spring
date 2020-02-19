@@ -10,7 +10,17 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-2">
             <h3 th:if="${driverList.isEmpty()}" th:text="#{message.empty.driver.list}"></h3>
-            <div id="appointments">
+            <div>
+                <form action="/admin" method="get">
+                    <input type="submit" th:value="#{message.main.page}" class="btn btn-default"
+                           style="margin-top:20px">
+                </form>
+                <form action="/admin/appoint/bus" method="get">
+                    <input type="submit" th:value="#{message.back}" class="btn btn-default"
+                           style="margin-top:20px">
+                </form>
+            </div>
+            <div id="appointments" style="margin-top: 20px">
                 <table class="table" th:if="${!driverList.isEmpty()}">
                     <tr>
                         <th th:text="#{message.user.name}"></th>

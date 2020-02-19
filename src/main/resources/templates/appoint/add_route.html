@@ -9,7 +9,13 @@
 <div class="container" style="margin-top: 50px">
     <div class="row">
         <div class="col-md-12 col-md-offset-2">
-            <div id="routes">
+            <div>
+                <form action="/admin" method="get">
+                    <input type="submit" th:value="#{message.main.page}" class="btn btn-default"
+                           style="margin-top:20px">
+                </form>
+            </div>
+            <div id="routes" style="margin-top:20px">
                 <table class="table" th:if="${!routeList.isEmpty()}">
                     <tr>
                         <th th:text="#{message.route.number}"></th>
