@@ -45,11 +45,8 @@ public class UserService implements UserDetailsService {
     public User saveNewUser(@NonNull UserRegisterDTO userDTO) throws UserExistException {
         User user = createUserFromUserRegisterDTO(userDTO);
         Optional<User> saveUser = Optional.of(userRepository.save(user));
-        if (saveUser.isPresent()) {
-            return saveUser.get();
-        } else {
-            throw new UserExistException(user.getEmail());
-        }
+        return saveUser.orElseThrow(() ->
+                new UserExistException(user.getEmail()));
     }
 
     private User createUserFromUserRegisterDTO(@NonNull UserRegisterDTO userDTO) {
