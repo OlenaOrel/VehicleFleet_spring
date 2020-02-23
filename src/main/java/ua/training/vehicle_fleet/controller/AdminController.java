@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.vehicle_fleet.dto.AppointmentDto;
 import ua.training.vehicle_fleet.dto.AppointmentDtoConverter;
 import ua.training.vehicle_fleet.entity.Appointment;
-import ua.training.vehicle_fleet.exception.EntityNotFoundException;
 import ua.training.vehicle_fleet.service.AppointmentService;
 
 import java.util.List;
@@ -52,15 +51,11 @@ public class AdminController {
                             Model model) {
         if (appointmentId != null) {
             log.info("Finish appointment id = {}", appointmentId);
-            try {
-                appointmentService.doFinish(appointmentId);
-            } catch (EntityNotFoundException e) {
-                log.warn(e.getMessage());
-            }
-            List<AppointmentDto> appointmentDtoList = converter
-                    .covertAllToDto(appointmentService.getNotFinishedAppointment());
-            model.addAttribute("appointmentDtoList", appointmentDtoList);
+            appointmentService.doFinish(appointmentId);
         }
+        List<AppointmentDto> appointmentDtoList = converter
+                .covertAllToDto(appointmentService.getNotFinishedAppointment());
+        model.addAttribute("appointmentDtoList", appointmentDtoList);
         return ADMIN;
     }
 

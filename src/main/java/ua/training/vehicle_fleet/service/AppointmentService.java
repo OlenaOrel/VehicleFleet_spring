@@ -35,7 +35,7 @@ public class AppointmentService {
     }
 
     @Transactional
-    public void doFinish(@NonNull Long appointmentId) throws EntityNotFoundException {
+    public void doFinish(@NonNull Long appointmentId) {
         repository.updateStatusById(AppointmentStatus.FINISHED, appointmentId);
     }
 

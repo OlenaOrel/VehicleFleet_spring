@@ -21,8 +21,6 @@ public interface AppointmentRepository extends Repository<Appointment, Long> {
 
     List<Appointment> findByStatusNot(AppointmentStatus status);
 
-    Optional<Appointment> findByStatusAndRoute_Number(AppointmentStatus status, Integer routeNumber);
-
     @Modifying
     @Query("update Appointment t set t.status = :status where t.id = :id")
     void updateStatusById(@Param("status") AppointmentStatus status, @Param("id") Long id);

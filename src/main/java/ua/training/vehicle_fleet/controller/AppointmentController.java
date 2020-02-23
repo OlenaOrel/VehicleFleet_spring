@@ -37,6 +37,7 @@ public class AppointmentController {
     public static final String REDIRECT_ADMIN_APPOINT_CONFIRM = "redirect:/admin/appoint/confirm";
     public static final String APPOINT_CONFIRM = "appoint/confirm";
     public static final String REDIRECT_ADMIN = "redirect:/admin";
+
     private final RouteService routeService;
     private final BusService busService;
     private final UserService userService;
@@ -69,7 +70,7 @@ public class AppointmentController {
         log.info("Route id: {}", routeId);
         try {
             appointment.setRoute(routeService.getRouteById(routeId));
-            appointmentCache.getAppointmentCache().putIfAbsent(user.getId(), appointment);
+            appointmentCache.getAppointmentCache().put(user.getId(), appointment);
             log.info("AppointmentCache route = {}", appointmentCache.getAppointmentCache().get(user.getId()).getRoute());
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
@@ -90,11 +91,11 @@ public class AppointmentController {
         log.info("Bus id = {}", busId);
         if (busId != null) {
             Appointment appointment = appointmentCache.getAppointmentCache()
-                    .get(user.getId());
+                    .remove(user.getId());
             log.info("Appointment before add bus: {}", appointment.getRoute());
             try {
                 appointment.setBus(busService.getBusById(busId));
-                appointmentCache.getAppointmentCache().replace(user.getId(), appointment);
+                appointmentCache.getAppointmentCache().put(user.getId(), appointment);
             } catch (EntityNotFoundException e) {
                 e.printStackTrace();
             }
@@ -115,10 +116,10 @@ public class AppointmentController {
     public String addDriver(@RequestParam(required = false) Long driverId, @AuthenticationPrincipal User user) {
         log.info("Driver id = {}", driverId);
         if (driverId != null) {
-            Appointment appointment = appointmentCache.getAppointmentCache().get(user.getId());
+            Appointment appointment = appointmentCache.getAppointmentCache().remove(user.getId());
             try {
                 appointment.setDriver(userService.getUserById(driverId));
-                appointmentCache.getAppointmentCache().replace(user.getId(), appointment);
+                appointmentCache.getAppointmentCache().put(user.getId(), appointment);
             } catch (EntityNotFoundException e) {
                 e.printStackTrace();
             }
@@ -140,9 +141,8 @@ public class AppointmentController {
     @PostMapping(value = "/confirm")
     public String confirmAppointment(@RequestParam(required = false) boolean confirm, @AuthenticationPrincipal User user) {
         if (confirm) {
-            Appointment appointment = appointmentCache.getAppointmentCache().get(user.getId());
+            Appointment appointment = appointmentCache.getAppointmentCache().remove(user.getId());
             appointmentService.saveAppointment(appointment);
-            appointmentCache.getAppointmentCache().remove(user.getId());
             return REDIRECT_ADMIN;
         }
         return APPOINT_CONFIRM;
