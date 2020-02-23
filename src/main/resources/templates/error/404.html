@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+
+<br/><br/>
+<div class="container text-center">
+    <h3>404</h3>
+    <h1 th:text="#{message.error.not.found.title}"></h1>
+    <h5 th:text="#{message.error.not.found.description}"></h5>
+    <a href="/login" th:text="#{message.login}"></a>
+</div>
+
+</body>
+</html>

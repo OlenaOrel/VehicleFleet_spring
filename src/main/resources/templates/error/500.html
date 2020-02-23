@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+
+<br/><br/>
+<div class="container text-center">
+    <h3>500</h3>
+    <h1 th:text="#{message.internal.server.error.title}"></h1>
+    <h5 th:text="#{message.internal.server.error.description}"></h5>
+    <h5 th:text="#{message.internal.server.error.description1}"></h5>
+    <a href="/login" th:text="#{message.login}"></a>
+</div>
+
+</body>
+</html>
