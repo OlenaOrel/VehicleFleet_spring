@@ -65,7 +65,7 @@ public class AppointmentController {
 
 
     @PostMapping(value = "/route")
-    public String addRoute(@RequestParam() Long routeId, @AuthenticationPrincipal User user) {
+    public String addRoute(@RequestParam Long routeId, @AuthenticationPrincipal User user) {
         Appointment appointment = new Appointment();
         log.info("Route id: {}", routeId);
         try {
@@ -73,7 +73,7 @@ public class AppointmentController {
             appointmentCache.getAppointmentCache().put(user.getId(), appointment);
             log.info("AppointmentCache route = {}", appointmentCache.getAppointmentCache().get(user.getId()).getRoute());
         } catch (EntityNotFoundException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return REDIRECT_ADMIN_APPOINT_BUS;
     }
@@ -90,14 +90,14 @@ public class AppointmentController {
     public String addBus(@RequestParam(required = false) Long busId, @AuthenticationPrincipal User user) {
         log.info("Bus id = {}", busId);
         if (busId != null) {
-            Appointment appointment = appointmentCache.getAppointmentCache()
-                    .remove(user.getId());
-            log.info("Appointment before add bus: {}", appointment.getRoute());
             try {
+                Appointment appointment = appointmentCache.getAppointmentCache()
+                        .remove(user.getId());
+                log.info("Appointment before add bus: {}", appointment.getRoute());
                 appointment.setBus(busService.getBusById(busId));
                 appointmentCache.getAppointmentCache().put(user.getId(), appointment);
             } catch (EntityNotFoundException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
             return REDIRECT_ADMIN_APPOINT_DRIVER;
         }
@@ -116,12 +116,12 @@ public class AppointmentController {
     public String addDriver(@RequestParam(required = false) Long driverId, @AuthenticationPrincipal User user) {
         log.info("Driver id = {}", driverId);
         if (driverId != null) {
-            Appointment appointment = appointmentCache.getAppointmentCache().remove(user.getId());
             try {
+                Appointment appointment = appointmentCache.getAppointmentCache().remove(user.getId());
                 appointment.setDriver(userService.getUserById(driverId));
                 appointmentCache.getAppointmentCache().put(user.getId(), appointment);
             } catch (EntityNotFoundException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
             return REDIRECT_ADMIN_APPOINT_CONFIRM;
         }
@@ -139,10 +139,11 @@ public class AppointmentController {
 
 
     @PostMapping(value = "/confirm")
-    public String confirmAppointment(@RequestParam(required = false) boolean confirm, @AuthenticationPrincipal User user) {
+    public String confirmAppointment(@RequestParam boolean confirm, @AuthenticationPrincipal User user) {
         if (confirm) {
             Appointment appointment = appointmentCache.getAppointmentCache().remove(user.getId());
             appointmentService.saveAppointment(appointment);
+            log.info("Appointment cache {}", appointmentCache.getAppointmentCache().get(user.getId()));
             return REDIRECT_ADMIN;
         }
         return APPOINT_CONFIRM;
