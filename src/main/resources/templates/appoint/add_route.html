@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
 >
-<head th:replace="header::head"></head>
+<head th:replace="fragments/header::head"></head>
 <body>
-<div th:replace="header::user_head"></div>
+<div th:replace="fragments/header::user_head"></div>
 
 <div class="container" style="margin-top: 50px">
     <div class="row">
@@ -16,6 +16,7 @@
                 </form>
             </div>
             <div id="routes" style="margin-top:20px">
+                <h3 th:if="${routeList.isEmpty()}" th:text="#{message.empty.route.list}"></h3>
                 <table class="table" th:if="${!routeList.isEmpty()}">
                     <tr>
                         <th th:text="#{message.route.number}"></th>
